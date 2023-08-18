@@ -101,7 +101,7 @@ try {
     $watchdogScriptPath = Join-Path "$([System.IO.Path]::GetFullPath($env:TEMP))" "p5_wd_${TestID}.bat"
     $watchDogScript | Out-File -FilePath "$watchdogScriptPath" -Encoding ASCII
     $watchdogScriptPath = $watchdogScriptPath -replace '\(', '^(' -replace '\)', '^)'
-    $watchdogProcess = Start-Process -FilePath "cmd.exe" -ArgumentList "/c `"$watchdogScriptPath`"" -passthru -WindowStyle hidden
+    $watchdogProcess = Start-Process -FilePath "cmd.exe" -ArgumentList "/c `"$watchdogScriptPath`"" -Passthru -WindowStyle hidden
     Write-Host "Started watchdog process with id: $($watchdogProcess.id), parent: $PID, browser: $($browserProcess.id)"
 
     if ($null -eq $watchdogProcess) {
