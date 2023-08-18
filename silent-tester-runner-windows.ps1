@@ -69,7 +69,7 @@ try {
             ShowWindow(hWnd, 0);
       }
 "@
-    add-type -MemberDefinition $definition -Namespace my -Name WinApi
+    Add-Type -MemberDefinition $definition -Namespace my -Name WinApi
 
     $browserProcess = Start-Process -RedirectStandardOutput "$env:TEMP\p5_log_${TestID}.txt" -RedirectStandardError "$env:TEMP\p5_err_${TestID}.txt" -passthru $customBrowserPath -WorkingDirectory $env:TEMP -WindowStyle hidden -ArgumentList "$($pageURL)  --hide-crash-restore-bubble --autoplay-policy=no-user-gesture-required --disable-gpu --disable-renderer-backgrounding --disable-background-media-suspend --disable-backgrounding-occluded-windows --remote-debugging-port=0 --disable-infobars --disable-restore-session-state --user-data-dir=$browserDataDir --disable-gesture-requirement-for-media-playback --disable-background-networking --disable-background-timer-throttling --disable-breakpad --disable-client-side-phishing-detection --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-field-trial-config --disable-features=site-per-process,WebRtcHideLocalIpsWithMdns --disable-hang-monitor --disable-popup-blocking --disable-prompt-on-repost --disable-sync --disable-translate --metrics-recording-only --no-first-run --safebrowsing-disable-auto-update --enable-automation --password-store=basic --use-mock-keychain --mute-audio --process-per-site"
     if ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name -ne "NT AUTHORITY\SYSTEM") {
