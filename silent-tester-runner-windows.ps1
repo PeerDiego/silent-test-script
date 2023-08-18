@@ -56,7 +56,7 @@ try {
         Write-Host "Could not find Edge or Chrome executable (chrome.exe), Please set `$customBrowserPath variable in the script to your Chrome executable path"
         Exit 1
     }
-    Write-Host "Found Browser path $($customBrowserPath)"
+    Write-Host "Found Browser path $customBrowserPath"
 
 
     # Launch browser
