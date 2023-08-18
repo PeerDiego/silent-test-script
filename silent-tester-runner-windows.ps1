@@ -110,7 +110,7 @@ try {
 
     # Sleep until scenario time is reached
     Write-Host "Waiting for scenario time to pass ($scenarioDuration seconds)"
-    Start-Sleep -s $scenarioDuration
+    Start-Sleep -Seconds $scenarioDuration
     Write-Host "Scenario time reached - closing browser with id: $($browserProcess.id)"
 }
 finally {
