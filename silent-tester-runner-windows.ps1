@@ -1,9 +1,9 @@
 [CmdletBinding()]
 param (
   [Parameter(Mandatory=$false)]
-  [string] $TenantID = "TENANT_ID", # Replace TENANT_ID with you actual Microsoft Tenant Id
-  [Parameter(Mandatory=$false)]
   [string] $TestID = "TEST_ID", # Replace with TEST_ID Which Must be different for each test
+  [Parameter(Mandatory=$false)]
+  [string] $TenantID = "TENANT_ID", # Replace TENANT_ID with you actual Microsoft Tenant Id
   [Parameter(Mandatory=$false)]
   [int] $ScenarioDuration = 86400, # defaults to 24 hours - can be changed
   [Parameter(Mandatory=$false)]
