@@ -26,35 +26,35 @@ if ((Test-Path $logPath) -and $runOnce) {
   Exit
 }
 if (!$customChromePath -or !(Test-Path $customChromePath)) {
-    try {
-      if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe') {
-        $edgeExe = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe' "(default)"
+  try {
+    if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe') {
+      $edgeExe = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe' "(default)"
+    }
+  }
+  catch {
+    # do nothing
+  }
+  if ($edgeExe) {
+    $customChromePath = $edgeExe
+  }
+  else {
+    for($i = 0; $i -le $defaultPaths.Count; $i++ ) {
+      if ($defaultPaths[$i] -and (Test-Path $defaultPaths[$i])) {
+        $customChromePath = $defaultPaths[$i]
+        break
       }
     }
-    catch {
-      # do nothing
-    }
-    if ($edgeExe) {
-      $customChromePath = $edgeExe
-    }
-    else {
-        for($i = 0; $i -le $defaultPaths.Count; $i++ ) {
-            if ($defaultPaths[$i] -and (Test-Path $defaultPaths[$i])) {
-                $customChromePath = $defaultPaths[$i]
-                break
-            }
-        }
-    }
-    if (!$customChromePath) {
-        Write-Host "Could not find Edge or Chrome executable (chrome.exe), Please set `$customChromePath variable in the script to your Chrome executable path"
-        Exit
-    }
+  }
+  if (!$customChromePath) {
+    Write-Host "Could not find Edge or Chrome executable (chrome.exe), Please set `$customChromePath variable in the script to your Chrome executable path"
+    Exit
+  }
 }
 Write-Host "Found Chrome path $($customChromePath)"
-$Process = Start-Process -RedirectStandardOutput $logPath -RedirectStandardError $errLogPath -passthru $customChromePath -ArgumentList "$($pageURL)  --hide-crash-restore-bubble --autoplay-policy=no-user-gesture-required --disable-gpu --remote-debugging-port=0 --disable-infobars --disable-restore-session-state --user-data-dir=$p5UserDataDir --disable-gesture-requirement-for-media-playback --disable-background-networking --disable-background-timer-throttling --disable-breakpad --disable-client-side-phishing-detection --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-field-trial-config --disable-features=site-per-process,WebRtcHideLocalIpsWithMdns --disable-hang-monitor --disable-popup-blocking --disable-prompt-on-repost --disable-sync --disable-translate --metrics-recording-only --no-first-run --safebrowsing-disable-auto-update --enable-automation --password-store=basic --use-mock-keychain --mute-audio --process-per-site" -WorkingDirectory $env:TEMP
+$Process = Start-Process -RedirectStandardOutput $logPath -RedirectStandardError $errLogPath -passthru $customChromePath -ArgumentList "$($pageURL)  --hide-crash-restore-bubble --autoplay-policy=no-user-gesture-required --disable-backgrounding-occluded-windows --disable-background-media-suspend --disable-renderer-backgrounding --disable-gpu --remote-debugging-port=0 --disable-infobars --disable-restore-session-state --user-data-dir=$p5UserDataDir --disable-gesture-requirement-for-media-playback --disable-background-networking --disable-background-timer-throttling --disable-breakpad --disable-client-side-phishing-detection --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-field-trial-config --disable-features=site-per-process,WebRtcHideLocalIpsWithMdns --disable-hang-monitor --disable-popup-blocking --disable-prompt-on-repost --disable-sync --disable-translate --metrics-recording-only --no-first-run --safebrowsing-disable-auto-update --enable-automation --password-store=basic --use-mock-keychain --mute-audio --process-per-site" -WorkingDirectory $env:TEMP
 if ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name -ne "NT AUTHORITY\SYSTEM") {
-    While ($Process.MainWindowHandle -eq 0) { Start-Sleep -m 100 }
-    [my.WinApi]::Hide($Process.MainWindowHandle)
+  While ($Process.MainWindowHandle -eq 0) { Start-Sleep -m 100 }
+  [my.WinApi]::Hide($Process.MainWindowHandle)
 }
 Write-Host "Started Chromium process, with id: $($Process.id)"
 $chromePid = $Process.id
@@ -66,15 +66,15 @@ Start-Sleep -s $scenarioDuration
 $stopProcessInfo = Stop-Process -InputObject $Process -passthru
 $stopProcessInfo
 if (Test-Path $preferencesFilePath) {
-    try {
-        $Prefs = ((Get-Content $preferencesFilePath) -replace "`"exit_type`":`"Crashed`"" , "`"exit_type`":`"none`"") -replace "`"exited_cleanly`":false","`"exited_cleanly`":true"
-        Set-Content -Path $preferencesFilePath -Value $Prefs
-        Set-ItemProperty -Path $preferencesFilePath -Name IsReadOnly -Value $true
-    } catch {}
+  try {
+    $Prefs = ((Get-Content $preferencesFilePath) -replace "`"exit_type`":`"Crashed`"" , "`"exit_type`":`"none`"") -replace "`"exited_cleanly`":false","`"exited_cleanly`":true"
+    Set-Content -Path $preferencesFilePath -Value $Prefs
+    Set-ItemProperty -Path $preferencesFilePath -Name IsReadOnly -Value $true
+  } catch {}
 }
 if (Test-Path $cacheFolderPath) {
-    try {
-        Remove-Item -Recurse $cacheFolderPath
-    } catch {}
+  try {
+    Remove-Item -Recurse $cacheFolderPath
+  } catch {}
 }
 Write-Host "Stopped Chromium process"
