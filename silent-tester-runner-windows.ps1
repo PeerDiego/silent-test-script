@@ -8,7 +8,7 @@ param (
   [int] $ScenarioDuration = 86400, # defaults to 24 hours - can be changed
   [Parameter(Mandatory=$false)]
   [Alias ("SCCM","Intune")]
-  [switch] $UEM_Comatible_Mode,
+  [switch] $UEM_Compatible_Mode,
   [Parameter(Mandatory=$false)]
   [Alias ("Force")]
   [switch] $AllowMultipleRuns, # Use if you want to be able to run more the once with the same $TestID on the machine. 2 tabs might jump to user.
@@ -90,7 +90,7 @@ $cmd = "cmd.exe"
 $extraTimeout = $ScenarioDuration + 10
 $argos =  "/c timeout ${extraTimeout} && taskkill.exe /f /t /pid $chromePid && rd /s /q $cacheFolderPath"
 $watchdogProcess = Start-Process -WindowStyle hidden -passthru $cmd -ArgumentList $argos
-if ($UEM_Comatible_Mode) {
+if ($UEM_Compatible_Mode) {
   return
 }
 Start-Sleep -s $ScenarioDuration
