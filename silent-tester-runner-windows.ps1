@@ -7,12 +7,16 @@ param (
   [Parameter(Mandatory=$false)]
   [int] $ScenarioDuration = 86400, # defaults to 24 hours - can be changed
   [Parameter(Mandatory=$false)]
+  [Alias ("SCCM","Intune")]
+  [switch] $EM_Comatible_Mode,
+  [Parameter(Mandatory=$false)]
   [Alias ("Force")]
-  [switch] $AllowMultipleRuns # Use if you want to be able to run more the once with the same $TestID on the machine. 2 tabs might jump to user.
+  [switch] $AllowMultipleRuns, # Use if you want to be able to run more the once with the same $TestID on the machine. 2 tabs might jump to user.
+  [Parameter(Mandatory=$false)]
+  [string] $CustomChromePath = "" # Use if you want to specify the path to the Chrome executable
 )
 ### Setting up the variables ###
 $pageURL = "https://st-sdk.ecdn.teams.microsoft.com/?customerId=${TenantID}&adapterId=PowerShell"
-$customChromePath = ""
 $logPath = "$env:TEMP\p5_log_" + $TestID + ".txt"
 $errLogPath = "$env:TEMP\p5_err_" + $TestID + ".txt"
 $p5UserDataDir = "$env:TEMP\p5-user-" + $TestID
@@ -31,7 +35,7 @@ if ($ScenarioDuration -lt 300) {
   Exit 1
 }
 if ((Test-Path $logPath) -and (!$AllowMultipleRuns)) {
-  Write-Error "Test $TestID already ran on this machine. aborting"
+  Write-Error "Test '$TestID' already ran on this machine. aborting"
   Exit 1
 }
 
@@ -48,7 +52,7 @@ $definition = @"
 Add-Type -MemberDefinition $definition -Namespace my -Name WinApi
 
 ### Main Script ###
-if (!$customChromePath -or !(Test-Path $customChromePath)) {
+if (!$CustomChromePath -or !(Test-Path $CustomChromePath)) {
   try {
     if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe') {
       $edgeExe = Get-ItemPropertyValue 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe' "(default)"
@@ -58,23 +62,23 @@ if (!$customChromePath -or !(Test-Path $customChromePath)) {
     # do nothing
   }
   if ($edgeExe) {
-    $customChromePath = $edgeExe
+    $CustomChromePath = $edgeExe
   }
   else {
     for($i = 0; $i -le $defaultPaths.Count; $i++ ) {
       if ($defaultPaths[$i] -and (Test-Path $defaultPaths[$i])) {
-        $customChromePath = $defaultPaths[$i]
+        $CustomChromePath = $defaultPaths[$i]
         break
       }
     }
   }
-  if (!$customChromePath) {
-    Write-Host "Could not find Edge or Chrome executable (chrome.exe), Please set `$customChromePath variable in the script to your Chrome executable path"
+  if (!$CustomChromePath) {
+    Write-Host "Could not find Edge or Chrome executable (chrome.exe), Please set `$CustomChromePath variable in the script to your Chrome executable path"
     Exit
   }
 }
-Write-Host "Found Chrome path $($customChromePath)"
-$Process = Start-Process -RedirectStandardOutput $logPath -RedirectStandardError $errLogPath -passthru $customChromePath -ArgumentList "$($pageURL)  --hide-crash-restore-bubble --autoplay-policy=no-user-gesture-required --disable-backgrounding-occluded-windows --disable-background-media-suspend --disable-renderer-backgrounding --disable-gpu --remote-debugging-port=0 --disable-infobars --disable-restore-session-state --user-data-dir=$p5UserDataDir --disable-gesture-requirement-for-media-playback --disable-background-networking --disable-background-timer-throttling --disable-breakpad --disable-client-side-phishing-detection --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-field-trial-config --disable-features=site-per-process,WebRtcHideLocalIpsWithMdns --disable-hang-monitor --disable-popup-blocking --disable-prompt-on-repost --disable-sync --disable-translate --metrics-recording-only --no-first-run --safebrowsing-disable-auto-update --enable-automation --password-store=basic --use-mock-keychain --mute-audio --process-per-site" -WorkingDirectory $env:TEMP
+Write-Host "Found Chrome path $($CustomChromePath)"
+$Process = Start-Process -RedirectStandardOutput $logPath -RedirectStandardError $errLogPath -passthru $CustomChromePath -ArgumentList "$($pageURL)  --hide-crash-restore-bubble --autoplay-policy=no-user-gesture-required --disable-backgrounding-occluded-windows --disable-background-media-suspend --disable-renderer-backgrounding --disable-gpu --remote-debugging-port=0 --disable-infobars --disable-restore-session-state --user-data-dir=$p5UserDataDir --disable-gesture-requirement-for-media-playback --disable-background-networking --disable-background-timer-throttling --disable-breakpad --disable-client-side-phishing-detection --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-field-trial-config --disable-features=site-per-process,WebRtcHideLocalIpsWithMdns --disable-hang-monitor --disable-popup-blocking --disable-prompt-on-repost --disable-sync --disable-translate --metrics-recording-only --no-first-run --safebrowsing-disable-auto-update --enable-automation --password-store=basic --use-mock-keychain --mute-audio --process-per-site" -WorkingDirectory $env:TEMP
 if ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name -ne "NT AUTHORITY\SYSTEM") {
   While ($Process.MainWindowHandle -eq 0) { Start-Sleep -m 100 }
   [my.WinApi]::Hide($Process.MainWindowHandle)
