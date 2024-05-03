@@ -74,7 +74,7 @@ if (!$CustomChromePath -or !(Test-Path $CustomChromePath)) {
   }
   if (!$CustomChromePath) {
     Write-Host "Could not find Edge or Chrome executable (chrome.exe), Please set `$CustomChromePath variable in the script to your Chrome executable path"
-    Exit
+    Exit 2
   }
 }
 Write-Host "Found Chrome path $($CustomChromePath)"
