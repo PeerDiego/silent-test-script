@@ -10,6 +10,18 @@ param (
     [Alias ("Force")]
     [switch] $AllowMultipleRuns # Use if you want to be able to run more the once with the same $TestID on the machine. 2 tabs might jump to user.
 )
+### Parameter validation ###
+$RegexForTenantId = '[a-z0-9]{8}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{12}'
+if ($TenantID -notmatch $RegexForTenantId) {
+    Write-Error "Invalid Parameter: Tenant ID. Please provide a valid Tenant ID."
+    Exit 1
+}
+if ($ScenarioDuration -lt 300) {
+    Write-Error "Invalid Parameter: Scenario Duration. Please provide a Scenario Duration of greater than 300."
+    Exit 1
+}
+
+### Setting up the variables ###
 $pageURL = "https://st-sdk.ecdn.teams.microsoft.com/?customerId=${TenantID}&adapterId=PowerShell"
 $customChromePath = ""
 $logPath = "$env:TEMP\p5_log_" + $TestID + ".txt"
@@ -19,6 +31,7 @@ $preferencesFilePath = $p5UserDataDir + "\Default\Preferences"
 $cacheFolderPath = $p5UserDataDir + "\Default\Cache"
 $defaultPaths = @("C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe","C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", "C:\Program Files\Google\Chrome\Application\chrome.exe")
 
+### Function to hide the browser window ###
 $definition = @"
       [DllImport("user32.dll")]
       [return: MarshalAs(UnmanagedType.Bool)]
@@ -29,6 +42,8 @@ $definition = @"
       }
 "@
 Add-Type -MemberDefinition $definition -Namespace my -Name WinApi
+
+### Main Script ###
 if ((Test-Path $logPath) -and (!$AllowMultipleRuns)) {
   Write-Host "Test $TestID already ran on this machine. aborting"
   Exit
