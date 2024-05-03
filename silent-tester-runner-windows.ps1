@@ -1,26 +1,15 @@
 [CmdletBinding()]
 param (
-    [Parameter(Mandatory=$false)]
-    [string] $TenantID = "TENANT_ID", # Replace TENANT_ID with you actual Microsoft Tenant Id
-    [Parameter(Mandatory=$false)]
-    [string] $TestID = "TEST_ID", # Replace with TEST_ID Which Must be different for each test
-    [Parameter(Mandatory=$false)]
-    [int] $ScenarioDuration = 86400, # defaults to 24 hours - can be changed
-    [Parameter(Mandatory=$false)]
-    [Alias ("Force")]
-    [switch] $AllowMultipleRuns # Use if you want to be able to run more the once with the same $TestID on the machine. 2 tabs might jump to user.
+  [Parameter(Mandatory=$false)]
+  [string] $TenantID = "TENANT_ID", # Replace TENANT_ID with you actual Microsoft Tenant Id
+  [Parameter(Mandatory=$false)]
+  [string] $TestID = "TEST_ID", # Replace with TEST_ID Which Must be different for each test
+  [Parameter(Mandatory=$false)]
+  [int] $ScenarioDuration = 86400, # defaults to 24 hours - can be changed
+  [Parameter(Mandatory=$false)]
+  [Alias ("Force")]
+  [switch] $AllowMultipleRuns # Use if you want to be able to run more the once with the same $TestID on the machine. 2 tabs might jump to user.
 )
-### Parameter validation ###
-$RegexForTenantId = '[a-z0-9]{8}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{12}'
-if ($TenantID -notmatch $RegexForTenantId) {
-    Write-Error "Invalid Parameter: Tenant ID. Please provide a valid Tenant ID."
-    Exit 1
-}
-if ($ScenarioDuration -lt 300) {
-    Write-Error "Invalid Parameter: Scenario Duration. Please provide a Scenario Duration of greater than 300."
-    Exit 1
-}
-
 ### Setting up the variables ###
 $pageURL = "https://st-sdk.ecdn.teams.microsoft.com/?customerId=${TenantID}&adapterId=PowerShell"
 $customChromePath = ""
@@ -31,23 +20,34 @@ $preferencesFilePath = $p5UserDataDir + "\Default\Preferences"
 $cacheFolderPath = $p5UserDataDir + "\Default\Cache"
 $defaultPaths = @("C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe","C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", "C:\Program Files\Google\Chrome\Application\chrome.exe")
 
+### Parameter validation ###
+$RegexForTenantId = '[a-z0-9]{8}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{12}'
+if ($TenantID -notmatch $RegexForTenantId) {
+  Write-Error "Invalid Parameter: Tenant ID. Please provide a valid Tenant ID."
+  Exit 1
+}
+if ($ScenarioDuration -lt 300) {
+  Write-Error "Invalid Parameter: Scenario Duration. Please provide a Scenario Duration of greater than 300."
+  Exit 1
+}
+if ((Test-Path $logPath) -and (!$AllowMultipleRuns)) {
+  Write-Error "Test $TestID already ran on this machine. aborting"
+  Exit 1
+}
+
 ### Function to hide the browser window ###
 $definition = @"
-      [DllImport("user32.dll")]
-      [return: MarshalAs(UnmanagedType.Bool)]
-      static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-      public static void Hide(IntPtr hWnd) {
-        if ((int)hWnd > 0)
-            ShowWindow(hWnd, 0);
-      }
+  [DllImport("user32.dll")]
+  [return: MarshalAs(UnmanagedType.Bool)]
+  static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+  public static void Hide(IntPtr hWnd) {
+    if ((int)hWnd > 0)
+      ShowWindow(hWnd, 0);
+  }
 "@
 Add-Type -MemberDefinition $definition -Namespace my -Name WinApi
 
 ### Main Script ###
-if ((Test-Path $logPath) -and (!$AllowMultipleRuns)) {
-  Write-Host "Test $TestID already ran on this machine. aborting"
-  Exit
-}
 if (!$customChromePath -or !(Test-Path $customChromePath)) {
   try {
     if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe') {
