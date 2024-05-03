@@ -1,8 +1,16 @@
-$TenantID = "TENANT_ID" # Replace TENANT_ID with you actual Microsoft Tenant Id
-$TestID = "TEST_ID" # Replace with TEST_ID Which Must be different for each test
+[CmdletBinding()]
+param (
+    [Parameter(Mandatory=$false)]
+    [string] $TenantID = "TENANT_ID", # Replace TENANT_ID with you actual Microsoft Tenant Id
+    [Parameter(Mandatory=$false)]
+    [string] $TestID = "TEST_ID", # Replace with TEST_ID Which Must be different for each test
+    [Parameter(Mandatory=$false)]
+    [int] $ScenarioDuration = 86400, # defaults to 24 hours - can be changed
+    [Parameter(Mandatory=$false)]
+    [Alias ("Force")]
+    [switch] $AllowMultipleRuns # Use if you want to be able to run more the once with the same $TestID on the machine. 2 tabs might jump to user.
+)
 $pageURL = "https://st-sdk.ecdn.teams.microsoft.com/?customerId=${TenantID}&adapterId=PowerShell"
-$scenarioDuration = 86400 # defaults to 24 hours - can be changed
-$runOnce = $true # Set to $false if you want to be able to run more the one time on the machine. 2 tabs might jump to user.
 $customChromePath = ""
 $logPath = "$env:TEMP\p5_log_" + $TestID + ".txt"
 $errLogPath = "$env:TEMP\p5_err_" + $TestID + ".txt"
@@ -20,8 +28,8 @@ $definition = @"
             ShowWindow(hWnd, 0);
       }
 "@
-add-type -MemberDefinition $definition -Namespace my -Name WinApi
-if ((Test-Path $logPath) -and $runOnce) {
+Add-Type -MemberDefinition $definition -Namespace my -Name WinApi
+if ((Test-Path $logPath) -and (!$AllowMultipleRuns)) {
   Write-Host "Test $TestID already ran on this machine. aborting"
   Exit
 }
@@ -59,10 +67,10 @@ if ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name -ne "NT AUTHO
 Write-Host "Started Chromium process, with id: $($Process.id)"
 $chromePid = $Process.id
 $cmd = "cmd.exe"
-$extraTimeout = $scenarioDuration + 10
+$extraTimeout = $ScenarioDuration + 10
 $argos =  "/c timeout ${extraTimeout} && taskkill.exe /f /t /pid ${chromePid}"
 $watchdogProcess = Start-Process -WindowStyle hidden -passthru $cmd -ArgumentList $argos
-Start-Sleep -s $scenarioDuration
+Start-Sleep -s $ScenarioDuration
 $stopProcessInfo = Stop-Process -InputObject $Process -passthru
 $stopProcessInfo
 if (Test-Path $preferencesFilePath) {
