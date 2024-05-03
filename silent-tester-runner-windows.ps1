@@ -15,6 +15,10 @@ param (
   [Parameter(Mandatory=$false)]
   [string] $CustomChromePath = "" # Use if you want to specify the path to the Chrome executable
 )
+#############
+### SETUP ###
+#############
+
 ### Setting up the variables ###
 $pageURL = "https://st-sdk.ecdn.teams.microsoft.com/?customerId=${TenantID}&adapterId=PowerShell"
 $logPath = "$env:TEMP\p5_log_" + $TestID + ".txt"
@@ -52,7 +56,11 @@ $definition = @"
 "@
 Add-Type -MemberDefinition $definition -Namespace my -Name WinApi
 
-### Main Script ###
+###################
+### MAIN SCRIPT ###
+###################
+
+### Selecting the Chrome executable path ###
 if (!$CustomChromePath -or !(Test-Path $CustomChromePath)) {
   try {
     if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe') {
@@ -79,12 +87,16 @@ if (!$CustomChromePath -or !(Test-Path $CustomChromePath)) {
   }
 }
 Write-Host "Found Chrome path '$CustomChromePath'"
+
+### Starting the browser process ###
 $Process = Start-Process -RedirectStandardOutput $logPath -RedirectStandardError $errLogPath -passthru $CustomChromePath -ArgumentList "$($pageURL)  --hide-crash-restore-bubble --autoplay-policy=no-user-gesture-required --disable-backgrounding-occluded-windows --disable-background-media-suspend --disable-renderer-backgrounding --disable-gpu --remote-debugging-port=0 --disable-infobars --disable-restore-session-state --user-data-dir=$p5UserDataDir --disable-gesture-requirement-for-media-playback --disable-background-networking --disable-background-timer-throttling --disable-breakpad --disable-client-side-phishing-detection --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-field-trial-config --disable-features=site-per-process,WebRtcHideLocalIpsWithMdns --disable-hang-monitor --disable-popup-blocking --disable-prompt-on-repost --disable-sync --disable-translate --metrics-recording-only --no-first-run --safebrowsing-disable-auto-update --enable-automation --password-store=basic --use-mock-keychain --mute-audio --process-per-site" -WorkingDirectory $env:TEMP
 if ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name -ne "NT AUTHORITY\SYSTEM") {
   While ($Process.MainWindowHandle -eq 0) { Start-Sleep -m 100 }
   [my.WinApi]::Hide($Process.MainWindowHandle)
 }
 Write-Host "$(Get-Date) Started Chromium process, with id: $($Process.id)"
+
+### Setting up the watchdog process ###
 $chromePid = $Process.id
 $cmd = "cmd.exe"
 $extraTimeout = $ScenarioDuration + 10
@@ -93,6 +105,8 @@ $watchdogProcess = Start-Process -WindowStyle hidden -passthru $cmd -ArgumentLis
 if ($UEM_Compatible_Mode) {
   return
 }
+
+### Waiting for the scenario to end and clean-up ###
 Start-Sleep -s $ScenarioDuration
 $stopProcessInfo = Stop-Process -InputObject $Process -passthru
 if (Test-Path $preferencesFilePath) {
