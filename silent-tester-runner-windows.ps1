@@ -1,14 +1,14 @@
 [CmdletBinding()]
 param (
   [Parameter(Mandatory=$false)]
-  [string] $TestID = "TEST_ID", # Replace with TEST_ID Which Must be different for each test
+  [string] $TestID = "TEST_ID", # TEST_ID must be different for each test, unless you use the AllowMultipleRuns switch
   [Parameter(Mandatory=$false)]
-  [string] $TenantID = "TENANT_ID", # Replace TENANT_ID with you actual Microsoft Tenant Id
+  [int] $ScenarioDuration = 86400, # defaults to 24 hours
   [Parameter(Mandatory=$false)]
-  [int] $ScenarioDuration = 86400, # defaults to 24 hours - can be changed
+  [string] $TenantID = "TENANT_ID", # We recommend replacing TENANT_ID in this script with your actual Microsoft Tenant Id
   [Parameter(Mandatory=$false)]
   [Alias ("SCCM","Intune")]
-  [switch] $UEM_Compatible_Mode,
+  [switch] $UEM_Compatible_Mode, # Use for better compatibility with UEM solutions
   [Parameter(Mandatory=$false)]
   [Alias ("Force")]
   [switch] $AllowMultipleRuns, # Use if you want to be able to run more the once with the same $TestID on the machine. 2 tabs might jump to user.
