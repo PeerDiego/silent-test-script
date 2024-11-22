@@ -1,19 +1,19 @@
 [CmdletBinding()]
 param (
   [Parameter(Mandatory=$false)]
-  [string] $TestID = "TEST_ID", # TEST_ID must be different for each test, unless you use the AllowMultipleRuns switch
+  [string] $TestID = "TEST_ID", # TEST_ID must be different for each test, unless you use the AllowMultipleRuns switch.
   [Parameter(Mandatory=$false)]
-  [int] $ScenarioDuration = 86400, # defaults to 24 hours
+  [int] $ScenarioDuration = 86400, # Default is 86400 seconds, or 24 hours.
   [Parameter(Mandatory=$false)]
-  [string] $TenantID = "TENANT_ID", # We recommend replacing TENANT_ID in this script with your actual Microsoft Tenant Id
+  [string] $TenantID = "TENANT_ID", # IMPORTANT! Either replace 'TENANT_ID' with your actual Microsoft Tenant Id or pass it as an argument.
   [Parameter(Mandatory=$false)]
   [Alias ("SCCM","Intune")]
-  [switch] $UEM_Compatible_Mode, # Use for better compatibility with UEM solutions
+  [switch] $UEM_Compatible_Mode, # Use for better compatibility with UEM solutions such as SCCM and Intune.
   [Parameter(Mandatory=$false)]
   [Alias ("Force")]
   [switch] $AllowMultipleRuns, # Use if you want to be able to run more the once with the same $TestID on the machine. 2 tabs might jump to user.
   [Parameter(Mandatory=$false)]
-  [string] $CustomChromePath = "" # Use if you want to specify the path to the Chrome executable
+  [string] $CustomChromePath = "" # Use if you want to specify the path to the Chromium executable.
 )
 #############
 ### SETUP ###
@@ -60,7 +60,7 @@ Add-Type -MemberDefinition $definition -Namespace my -Name WinApi
 ### MAIN SCRIPT ###
 ###################
 
-### Selecting the Chrome executable path ###
+### Selecting the Chromium executable path ###
 if (!$CustomChromePath -or !(Test-Path $CustomChromePath)) {
   try {
     if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe') {
@@ -106,7 +106,7 @@ if ($UEM_Compatible_Mode) {
   return
 }
 
-### Waiting for the scenario to end and clean-up ###
+### Waiting for the scenario duration time to elapse, then clean-up ###
 Start-Sleep -s $ScenarioDuration
 $stopProcessInfo = Stop-Process -InputObject $Process -passthru
 if (Test-Path $preferencesFilePath) {
