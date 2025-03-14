@@ -10,7 +10,7 @@ Improves the original script's flexibility, robustness, and compatibility with d
 
 ## Summary
 
-The main change is with the use of the `UEM_Compatible_Mode` switch which allows the script to exit after the silent runner is launched, relying on the child watchdog process to close it after the scenario duration time elapses.
+The main change is with the use of the `UEM_Compatible_Mode` switch which allows the script to exit after the silent runner is launched, relying on the child watchdog process to close the runner (headless browser instance) after the scenario duration time elapses.
 Without the switch, the script stays open for the duration of the scenario causing UEMs to time out and mis-report the script as having failed.
 
 ## Original
@@ -18,4 +18,4 @@ Without the switch, the script stays open for the duration of the scenario causi
 The current official script can be found in the Microsoft eCDN documentation here:
 https://learn.microsoft.com/ecdn/technical-documentation/silent-testing-framework#run-instructions-for-windows-environment
 
-I've included a copy of the unedited script (which is unchanged since 2023) in the /original directory for comparison and posterity.
+I've included a copy of latest version the unedited script (as of March 2025) in the /original directory for comparison and posterity.
