@@ -43,6 +43,7 @@ $defaultPaths = @(
   "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
   "C:\Program Files\Google\Chrome\Application\chrome.exe")
 $durationMinimum = 60
+$HeadlessRunner = -not $DirectRunner -and -not $OldHideMethod
 
 ### Parameter validation ###
 $RegexForTenantId = '[a-z0-9]{8}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{12}'
@@ -70,9 +71,7 @@ if ($NewHideMethod) {
   Write-Warning "The -NewHideMethod switch has been depracated. The --headless hide method is now the default method. To use the old hide method, use the -OldHideMethod switch."
 }
 
-$HeadlessRunner = -not $DirectRunner -and -not $OldHideMethod
-
-### C# class to hide/show the browser window ###
+### Old method: C# class to hide/show the browser window ###
 $definition = @"
   [DllImport("user32.dll")]
   [return: MarshalAs(UnmanagedType.Bool)]
@@ -224,8 +223,12 @@ if ($PassThru) {
   if (($postCount = $Global:eCDNRunners.Count) -ne $preCount) {
     Write-Verbose "Removed $($preCount - $postCount) processes from the global eCDNRunners list"
   }
-  # Add the new process to the list
+  # Add properties to the runner process object
+  $Process | Add-Member -MemberType NoteProperty -Name "TestID" -Value $TestID
+  $Process | Add-Member -MemberType NoteProperty -Name "TenantID" -Value $TenantID
+  $Process | Add-Member -MemberType NoteProperty -Name "ScenarioDuration" -Value $ScenarioDuration
   $Process | Add-Member -MemberType NoteProperty -Name "isHeadless" -Value $HeadlessRunner
+  # Adding methods to control the visibility of the Chromium window
   $Process | Add-Member -MemberType ScriptMethod -Name SetRunnerWindow -Value {
     param($nCmdShow=1) # Default to SW_SHOWNORMAL
     if ($this.isHeadless) {
@@ -253,6 +256,7 @@ if ($PassThru) {
   }
   # Adding Watchdog process to the process object
   $Process | Add-Member -MemberType NoteProperty -Name WatchdogProcess -Value $watchdogProcess
+  # Adding kill method to the process object
   $Process | Add-Member -MemberType ScriptMethod -Name StopRunner -Value {
     Stop-Process -InputObject $this -Force
     stop-Process -InputObject $this.WatchdogProcess -Force
@@ -263,9 +267,8 @@ if ($PassThru) {
   Write-Verbose "Added new runner with ID $($Process.Id) to the global eCDNRunners list"
 
   if (-not $UEM_Compatible_Mode) {
-    Write-Warning "By using the -PassThru switch, UEM_Compatible_Mode is automatically enabled. As such, the runner will solely rely on the watchdog process with ID $($watchdogProcess.Id) to end the Chromium process."
+    Write-Warning "The -PassThru switch enables UEM_Compatible_Mode, relying solely on the watchdog process (ID $($watchdogProcess.Id)) to terminate the runner process."
   }
-
   return $Process
 }
 
