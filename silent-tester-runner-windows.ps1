@@ -12,7 +12,7 @@ param (
   [switch] $PreferChrome,
   [string] $CustomChromiumPath = "", # Use if you want to specify the path to the Chromium executable.
   [Alias ("ShowRunner","DontHideRunner")]
-  [switch] $DirectRunner,
+  [switch] $DirectRunner, # Use if you want to run the Chromium process in a visible window. This is useful for debugging purposes.
   [string] $AdapterId, # Use if you want to specify the adapter ID. Default is PowerShell, or Direct if -DirectRunner switch is used.
   [Alias ("ReturnRunner")]
   [switch] $PassThru, # Returns the process object of the Chromium process.
@@ -26,11 +26,8 @@ param (
 
 ### Setting up the variables ###
 if (!$AdapterId) {
-  $AdapterId = if ($DirectRunner) { 
-    'Direct'
-  } else {
-    'PowerShell'
-  }
+  $AdapterId = if ($DirectRunner) { 'Direct' 
+  } else { 'PowerShell' }
 }
 $pageURL = "https://st-sdk.ecdn.teams.microsoft.com/?customerId=${TenantID}&adapterId=$AdapterId"
 $logPath = "$env:TEMP\p5_log_" + $TestID + ".txt"
@@ -275,6 +272,10 @@ if ($PassThru) {
 if ($UEM_Compatible_Mode) {
   return
 }
+
+###############
+### WRAP UP ###
+###############
 
 ### Waiting for the scenario duration time to elapse, then clean-up ###
 Start-Sleep -s $ScenarioDuration
