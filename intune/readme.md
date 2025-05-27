@@ -1,7 +1,5 @@
 # Instructions
 
-You will need to download and use your work or school credentials to open the PDF.
+Download the PDF and use your work or school credentials to access the content.
 
 Or use the [guidance in markdown format](./guidance.md).
-
-{% include guidance.md %}
