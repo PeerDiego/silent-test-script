@@ -1,19 +1,19 @@
 # [How to Deploy the eCDN Silent Runner Script with Microsoft Intune](https://app.tango.us/app/workflow/48a538b3-59c6-45a7-8b3a-90cdafdd9d50?utm_source=markdown&utm_medium=markdown&utm_campaign=workflow%20export%20links)
 
-__Last Update Date:__ May 08, 2025
+__Creation Date:__ May 08, 2023  
 __Created By:__ Diego Reategui  
 [View most recent version on Tango.ai](https://app.tango.us/app/workflow/48a538b3-59c6-45a7-8b3a-90cdafdd9d50?utm_source=markdown&utm_medium=markdown&utm_campaign=workflow%20export%20links)
 
 ***
 
-## # [Microsoft](https://microsoft.com)
+## # [Microsoft](https://intune.microsoft.com)
 
 ### 1. Procure the required scripts
 
 Reach out to your account team for these:
 
-- [_UEM compatible silent-tester-runner-windows.ps1_](/silent-tester-runner-windows.ps1) script
-- [_detection-script.ps1_](./detection-script.ps1) script
+- _UEM compatible_ _silent-tester-runner-windows.ps1_ script
+- _detection-script.ps1_ script
 
 ### 2. Prepare both script templates by adapting them for your environment
 
@@ -27,7 +27,7 @@ Reach out to your account team for these:
 
 2. In the _detection-script.ps1_, ensure that the value for **$TestID** matches the value set in the runner script.
 
-### 3. Once your scripts are adapted, go to [intune.microsoft.com](https://intune.microsoft.com/#home)
+### 3. [Once your scripts are adapted, go to intune.microsoft.com](https://intune.microsoft.com/#home)
 
 ### 4. Select Devices
 
@@ -72,7 +72,6 @@ No need to set a Scope tag.
 ![Step 14 screenshot](https://images.tango.us/workflows/48a538b3-59c6-45a7-8b3a-90cdafdd9d50/steps/e423f134-b207-4852-865f-8c617af9ad85/95bac6d3-e009-4672-9e20-5ac338f431f3.png?crop=focalpoint&fit=crop&fp-x=0.5000&fp-y=0.5000&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=237&mark-y=721&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz02MSZoPTIyJmZpdD1jcm9wJmNvcm5lci1yYWRpdXM9MTA%3D)
 
 ### 15. Select "+ Select groups to include"
-
 ![Step 15 screenshot](https://images.tango.us/workflows/48a538b3-59c6-45a7-8b3a-90cdafdd9d50/steps/282f48a1-63a5-4d75-be1a-732925f92ead/52755cdf-ea02-49b6-9e50-3a94b48f5864.png?crop=focalpoint&fit=crop&fp-x=0.3169&fp-y=0.3669&fp-z=1.5422&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=264&mark-y=364&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTYlMkNGRjc0NDImdz02NDUmaD0yNyZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw)
 
 ### 16. Select the target group(s)
@@ -84,15 +83,12 @@ The computers (or user) contained in these groups will be executing the detectio
 ### 17. Select the "Select" button
 
 ### 18. The group should now be displayed under "Assign to" heading
-
 ![Step 18 screenshot](https://images.tango.us/workflows/48a538b3-59c6-45a7-8b3a-90cdafdd9d50/steps/6f6cf66d-da77-47eb-95f8-c82975fa2499/6c2415c0-6051-47d6-a7ce-b3ff6044a926.png?crop=focalpoint&fit=crop&fp-x=0.3169&fp-y=0.3122&fp-z=1.5422&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=264&mark-y=315&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTYlMkNGRjc0NDImdz02NDUmaD05NyZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw)
 
 ### 19. Select "Daily" to modify the schedule
-
 ![Step 19 screenshot](https://images.tango.us/workflows/48a538b3-59c6-45a7-8b3a-90cdafdd9d50/steps/93c41818-f531-4228-b44a-8a3e0f44044b/197575be-e734-446d-afd7-efaf6d7cab52.png?crop=focalpoint&fit=crop&fp-x=0.2424&fp-y=0.3213&fp-z=3.0980&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=562&mark-y=351&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTYlMkNGRjc0NDImdz03NyZoPTUzJmZpdD1jcm9wJmNvcm5lci1yYWRpdXM9MTA%3D)
 
 ### 20. Change the frequency to Hourly, from the pull-down menu.
-
 ![Step 20 screenshot](https://images.tango.us/workflows/48a538b3-59c6-45a7-8b3a-90cdafdd9d50/steps/c09ee667-7ec2-4e29-b1f5-61cb3238f5f6/8e584059-273d-4899-9e52-56b24f30d804.png?crop=focalpoint&fit=crop&fp-x=0.9097&fp-y=0.2899&fp-z=2.9721&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=589&mark-y=336&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTYlMkNGRjc0NDImdz01NzgmaD04MiZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw)
 
 ### 21. Select Apply
