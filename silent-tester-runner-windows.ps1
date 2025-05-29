@@ -28,6 +28,8 @@ param (
 if (!$AdapterId) {
   $AdapterId = if ($DirectRunner) { 'Direct' 
   } else { 'PowerShell' }
+} else {
+  Write-Host "Adapter ID is set to: $AdapterId"
 }
 $pageURL = "https://st-sdk.ecdn.teams.microsoft.com/?customerId=${TenantID}&adapterId=$AdapterId"
 $logPath = "$env:TEMP\p5_log_" + $TestID + ".txt"
@@ -79,7 +81,7 @@ $definition = @"
   }
   public static void SetWindow(IntPtr hWnd, int nCmdShow) {
     if ((int)hWnd > 0) {
-      Console.WriteLine($"{DateTime.Now}  Executing ShowWindow({hWnd}, {nCmdShow})");
+      Console.WriteLine("{0}  Executing ShowWindow({1}, {2})", DateTime.Now, hWnd, nCmdShow);
       ShowWindow(hWnd, nCmdShow);
     }
   }
@@ -188,6 +190,7 @@ $cmd = "cmd.exe"
 $extraTimeout = $ScenarioDuration + 10
 $argos =  "/c timeout $extraTimeout && taskkill.exe /f /t /pid $chromePid && rd /s /q $cacheFolderPath"
 $watchdogProcess = Start-Process $cmd -WindowStyle hidden -ArgumentList $argos -Passthru
+Write-Verbose "$(Get-Date)  Started Watchdog process, with id: $($watchdogProcess.id)"
 
 if ($PassThru) {
   # Initialize the global list if it doesn't already exist
@@ -253,10 +256,27 @@ if ($PassThru) {
   }
   # Adding Watchdog process to the process object
   $Process | Add-Member -MemberType NoteProperty -Name WatchdogProcess -Value $watchdogProcess
+  # Add Monitor ScriptMethod property which reports the status of the process and when it's closed.
+  $Process | Add-Member -MemberType ScriptMethod -Name MonitorRunner -Value {
+    if ($this.HasExited) {
+      Write-Host "$(Get-Date)  Runner with ID $($this.Id) has already exited."
+      return
+    } else {
+      Write-Host "$(Get-Date)  Monitoring runner with ID $($this.Id)"
+    }
+    try {
+      while (Get-Process -Id $this.Id -ErrorAction Stop) {
+          Start-Sleep -Seconds 1
+      }
+      Write-Host "$(Get-Date)  Runner with ID $($this.Id) has exited."
+    } catch {
+      Write-Host "$(Get-Date)  Runner with ID $($this.Id) is no longer running."
+    }
+  }
   # Adding kill method to the process object
   $Process | Add-Member -MemberType ScriptMethod -Name StopRunner -Value {
     Stop-Process -InputObject $this -Force
-    stop-Process -InputObject $this.WatchdogProcess -Force
+    Stop-Process -InputObject $this.WatchdogProcess -Force
     Write-Host "$(Get-Date)  Stopped runner with ID $($this.Id) and it's watchdog process with ID $($this.WatchdogProcess.Id)"
   }
   # Adding the process to the global list of eCDNRunners
