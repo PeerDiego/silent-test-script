@@ -301,6 +301,7 @@ if ($PassThru) {
 }
 
 if ($UEM_Compatible_Mode) {
+  Start-Sleep -Seconds 5
   return
 }
 
