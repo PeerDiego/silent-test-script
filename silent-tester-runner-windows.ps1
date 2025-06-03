@@ -23,13 +23,25 @@ param (
 #############
 ### SETUP ###
 #############
+function Write-OutputOrHost {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$Object,
+        [ConsoleColor]$ForegroundColor = 'White'
+    )
+    if ($UEM_Compatible_Mode) {
+        Write-Output $Object
+    } else {
+        Write-Host $Object -ForegroundColor $ForegroundColor
+    }
+}
 
 ### Setting up the variables ###
 if (!$AdapterId) {
   $AdapterId = if ($DirectRunner) { 'Direct' 
   } else { 'PowerShell' }
 } else {
-  Write-Host "Adapter ID is set to: $AdapterId"
+  Write-OutputOrHost "Adapter ID is set to: $AdapterId"
 }
 $pageURL = "https://st-sdk.ecdn.teams.microsoft.com/?customerId=${TenantID}&adapterId=$AdapterId"
 $logPath = "$env:TEMP\p5_log_" + $TestID + ".txt"
@@ -121,12 +133,12 @@ if (!$CustomChromiumPath -or !(Test-Path $CustomChromiumPath)) {
   }
 
   if (!$CustomChromiumPath) {
-    Write-Host "Could not find Edge or Chrome executable. Please set the `$CustomChromiumPath variable in the script to your Chromium browser's executable path."
+    Write-OutputOrHost "Could not find Edge or Chrome executable. Please set the `$CustomChromiumPath variable in the script to your Chromium browser's executable path."
     Exit 2
   }
 
   if ($PreferChrome -and $CustomChromiumPath -notmatch "chrome\.exe") {
-    Write-Host "Chrome not found" -ForegroundColor DarkGray
+    Write-OutputOrHost "Chrome not found" -ForegroundColor DarkGray
   }
 }
 Write-Host "Using Chromium at path '$CustomChromiumPath'"
@@ -176,7 +188,7 @@ if ($HeadlessRunner) {
 }
 
 $Process = Start-Process $CustomChromiumPath -RedirectStandardOutput $logPath -RedirectStandardError $errLogPath -PassThru -ArgumentList ($browserArguments -join ' ') -WorkingDirectory $env:TEMP
-Write-Host "$(($startedAt=Get-Date))  Started Chromium process, with id: $($Process.id)"
+Write-OutputOrHost "$(($startedAt=Get-Date))  Started $($Process.Name) Chromium process, with id: $($Process.id)"
 # Swapping old window hide method with the --headless flag, as it doesn't work with the headless flag and will just indefinitely loop while it waits for the window to get a WindowHandle assigned.  Which it won't since it's headless.
 if ($OldHideMethod -and -not $DirectRunner -and [System.Security.Principal.WindowsIdentity]::GetCurrent().Name -ne "NT AUTHORITY\SYSTEM") {
   While ($Process.MainWindowHandle -eq 0 -and ($elapsed=(Get-Date) - $startedAt).TotalSeconds -lt 3) { Start-Sleep -m 100 }
@@ -190,7 +202,7 @@ $cmd = "cmd.exe"
 $extraTimeout = $ScenarioDuration + 10
 $argos =  "/c timeout $extraTimeout && taskkill.exe /f /t /pid $chromePid && rd /s /q $cacheFolderPath"
 $watchdogProcess = Start-Process $cmd -WindowStyle hidden -ArgumentList $argos -Passthru
-Write-Verbose "$(Get-Date)  Started Watchdog process, with id: $($watchdogProcess.id)"
+Write-Verbose "            Started Watchdog process, with id: $($watchdogProcess.id)"
 
 if ($PassThru) {
   # Initialize the global list if it doesn't already exist
@@ -232,12 +244,12 @@ if ($PassThru) {
   $Process | Add-Member -MemberType ScriptMethod -Name SetRunnerWindow -Value {
     param($nCmdShow=1) # Default to SW_SHOWNORMAL
     if ($this.isHeadless) {
-      Write-Host "Headless mode is enabled. Cannot set window visibility." -f DarkGray
+      Write-Host "Headless mode is enabled. Cannot set window visibility." -F DarkGray
       return
     }
     # ensure $nCmdShow is an int between 0 and 11
     if ($nCmdShow -lt 0 -or $nCmdShow -gt 11 -or $nCmdShow -notmatch '^\d+$') {
-      Write-Host "Invalid nCmdShow value [$($nCmdShow.GetType())]'$nCmdShow'. Must be between 0 and 11." -f Red
+      Write-Host "Invalid nCmdShow value [$($nCmdShow.GetType())]'$nCmdShow'. Must be between 0 and 11." -F Red
       return
     }
     [my.WinApi]::SetWindow($this.MainWindowHandle, $nCmdShow)
@@ -258,20 +270,19 @@ if ($PassThru) {
   $Process | Add-Member -MemberType NoteProperty -Name WatchdogProcess -Value $watchdogProcess
   # Add Monitor ScriptMethod property which reports the status of the process and when it's closed.
   $Process | Add-Member -MemberType ScriptMethod -Name MonitorRunner -Value {
-    if ($this.HasExited) {
-      Write-Host "$(Get-Date)  Runner with ID $($this.Id) has already exited."
-      return
-    } else {
-      Write-Host "$(Get-Date)  Monitoring runner with ID $($this.Id)"
+    if (-not $this.HasExited) {
+      Write-Host "$(Get-Date)  Runner with ID $($this.Id) is running. Monitoring for exit..."
     }
     try {
       while (Get-Process -Id $this.Id -ErrorAction Stop) {
           Start-Sleep -Seconds 1
+          if ($this.HasExited) {
+            Write-Host "$(Get-Date)  Runner with ID $($this.Id) has exited."
+            return
+          }
       }
-      Write-Host "$(Get-Date)  Runner with ID $($this.Id) has exited."
-    } catch {
-      Write-Host "$(Get-Date)  Runner with ID $($this.Id) is no longer running."
-    }
+    } catch {}
+    Write-Host "$(Get-Date)  Runner with ID $($this.Id) is no longer running."
   }
   # Adding kill method to the process object
   $Process | Add-Member -MemberType ScriptMethod -Name StopRunner -Value {
