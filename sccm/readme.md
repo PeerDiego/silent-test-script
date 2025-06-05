@@ -31,6 +31,8 @@ SYSTEM context.*
 
    :::image type="content" source="./media/sccm_image.png" alt-text="A screenshot of a software package Description automatically generated":::
 
+   :::image type="content" source="./media/sccm_image.png" alt-text="image":::
+
     b.  On the __Program Type__ page, select the __Standard__ program type for computers.
 
     c.  On the __Standard Program__ page, specify the following information.
