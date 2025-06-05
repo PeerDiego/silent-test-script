@@ -46,8 +46,8 @@ SYSTEM context.*
 
     d.  On the __Requirements page__, proceed with defaults or configure per your environment.
 
-   > [!NOTE]
-   > Configuration Manager cannot track packages running for more than 12 hours so it may present a "run time exceeded" failure for the deployment, which is an expected behavior and does not impact the runner script execution on the client side. Due to the long-running nature of the script, if it's been modified to run for less than 12 hours, we recommend setting the __Maximum allowed run time (minutes)__ to "Unknown".*
+  > [!NOTE]
+  > Configuration Manager cannot track packages running for more than 12 hours so it may present a "run time exceeded" failure for the deployment, which is an expected behavior and does not impact the runner script execution on the client side. Due to the long-running nature of the script, if it's been modified to run for less than 12 hours, we recommend setting the __Maximum allowed run time (minutes)__ to "Unknown".*
 
     e.  On the __Summary__ page, review and click *Next* to finish. Then click *Close* on the __Completion__ page.
 
