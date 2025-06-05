@@ -1,6 +1,4 @@
----
-title: Silent Testing with SCCM
----
+# Silent Testing with SCCM
 
 Goal: To provide guidance on how to facilitate Microsoft eCDN's Silent
 Testing feature using SCCM.
