@@ -8,6 +8,9 @@ Improves the original script's flexibility, robustness, and compatibility with d
 - **Improved Logging and Error Handling:** Enhanced error messages and logging for better troubleshooting.
 - **Watchdog Process:** Modified the watchdog process to include cache folder cleanup.
 
+> [!CAUTION]
+> Your experience in using Silent Testing depends on many factors, including the Windows version and browser version that you are using. This version of the script has been thoroughly tested and proven to work but __we cannot guarantee__ it will work in your environment. Use the tool at your own risk.
+
 ## Summary
 
 The main change is with the use of the `UEM_Compatible_Mode` switch which allows the script to exit after the silent runner is launched, relying on the child watchdog process to close the runner (headless browser instance) after the scenario duration time elapses.
