@@ -1,6 +1,6 @@
 # How to Deploy the eCDN Silent Runner Script with Microsoft SCCM
 
-__Last Update Date:__ June, 2024  
+__Last Update Date:__ June 2024  
 __Created By:__ Diego Reategui  
 
 ***
