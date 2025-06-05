@@ -36,7 +36,8 @@ SYSTEM context.*
    c.  On the __Standard Program__ page, specify the following information.
 
    - Provide a __Name__
-   - __Command Line__: `cmd /c powershell.exe -NoProfile -ExecutionPolicy Bypass -File silent-tester-runner-windows.ps1 -SCCM -TestID <a unique test id>`
+   - __Command Line__:\
+       `cmd /c powershell.exe -NoProfile -ExecutionPolicy Bypass -File silent-tester-runner-windows.ps1 -SCCM -TestID <a unique test id>`
    - __Run__: Normal
    - __Program Can Run__: Only when a user is logged on.
    - __Run Mode__: Run with user's rights.
