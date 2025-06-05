@@ -1,12 +1,12 @@
 # How to Deploy the eCDN Silent Runner Script with Microsoft Intune
 
-__Last Update Date:__ May 08, 2025  
+__Last Update Date:__ June 05, 2025  
 __Created By:__ Diego Reategui  
 [View most recent version on Tango.ai](https://app.tango.us/app/workflow/48a538b3-59c6-45a7-8b3a-90cdafdd9d50?utm_source=markdown&utm_medium=markdown&utm_campaign=workflow%20export%20links)
 
 ***
 
-Below is our guidance on how to deploy Microsoft eCDN Silent Runners using Microsoft Intune. Alternatively, you can download the [guidance in PDF format](./How%20to%20Deploy%20the%20eCDN%20Silent%20Runner%20Script%20with%20Microsoft%20Intune.pdf) and use your work or school credentials to access the content.
+Below is our guidance on how to deploy Microsoft eCDN Silent Runners using Microsoft Intune.
 
 > [!CAUTION]
 > This guidance has been tested and proven to work but __we cannot guarantee__ it will work in your environment. Please use the following as general guidance.
@@ -37,6 +37,9 @@ Reach out to your account team for these:
 ## 5. Select Scripts and remediation
 
 ## 6. Select Create script package
+
+> [!NOTE]
+> Requires _Windows license verification_ found in __Tenant administration__ > __Connectors and tokens__ > __Windows data__.
 
 ![Step 6 screenshot](https://images.tango.us/workflows/48a538b3-59c6-45a7-8b3a-90cdafdd9d50/steps/1c630f12-32a5-4b74-b4ce-60876e72dfff/8dff296f-2ee9-4fc5-be3f-ef044af17231.png?crop=focalpoint&fit=crop&fp-x=0.3860&fp-y=0.1367&fp-z=2.5126&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=452&mark-y=221&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTYlMkNGRjc0NDImdz0yOTUmaD03NiZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw)
 
