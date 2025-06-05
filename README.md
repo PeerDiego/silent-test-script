@@ -15,7 +15,8 @@ Without the switch, the script stays open for the duration of the scenario causi
 
 ## Original
 
-The current official script can be found in the Microsoft eCDN documentation here:
-https://learn.microsoft.com/ecdn/technical-documentation/silent-testing-framework#run-instructions-for-windows-environment
+The [current official script proposal can be found here](./headless-candidate/README.md).
 
 I've included a copy of latest version the unedited script (as of March 2025) in the /original directory for comparison and posterity.
+
+For more information on Silent Testing, see the [framework documentation](https://learn.microsoft.com/ecdn/technical-documentation/silent-testing-framework).
