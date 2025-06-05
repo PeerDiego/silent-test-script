@@ -11,13 +11,10 @@ Testing feature using SCCM.
 *For more on silent testing,* see [*Microsoft eCDN Silent Testing framework on Microsoft Learn*](https://learn.microsoft.com/ecdn/technical-documentation/silent-testing-framework#appendix-b-integrating-runners-using-headless-browser).
 
 > [!NOTE]
-> Customers should use the Package/Program delivery model instead
-of Applications due to the silent runner script not providing detection
-methods.
+> Customers should use the Package/Program delivery model instead of Applications due to the silent runner script not providing detection methods.
 
-*Important: Unlike most Package/Program deployments, the silent test
-script should be run under the USER context, [not]{.underline} the
-SYSTEM context.*
+> [!IMPORTANT]
+> Unlike most Package/Program deployments, the silent test script should be run under the __USER context__, not the SYSTEM context.
 
 ## Creating the [Configuration Manager package](https://learn.microsoft.com/mem/configmgr/apps/deploy-use/packages-and-programs) for Silent Runner
 
