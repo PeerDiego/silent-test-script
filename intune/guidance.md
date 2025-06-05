@@ -17,13 +17,13 @@ Reach out to your account team for these:
 
 1. In the _silent-tester-runner-windows.ps1_ script, ensure you set...
 
-    - your Tenant's ID as the value for **$TenantID**
-    - a new Test ID string as the value for **$TestID**
-    - a runner Time-To-Live (in seconds) of your choice, as the value for **$ScenarioDuration**
-    - the **$UEM\_Compatible\_Mode** parameter to **$true**  
+    - your Tenant's ID as the value for __$TenantID__
+    - a new Test ID string as the value for __$TestID__
+    - a runner Time-To-Live (in seconds) of your choice, as the value for __$ScenarioDuration__
+    - the __$UEM\_Compatible\_Mode__ parameter to __$true__  
     See [silent testing framework documentation](https://learn.microsoft.com/en-us/ecdn/technical-documentation/silent-testing-framework#run-instructions-for-windows-environment) for more information on these variables.
 
-2. In the _detection-script.ps1_, ensure that the value for **$TestID** matches the value set in the runner script.
+2. In the _detection-script.ps1_, ensure that the value for __$TestID__ matches the value set in the runner script.
 
 ## 3. Once your scripts are adapted, go to [intune.microsoft.com](https://intune.microsoft.com/#home)
 
@@ -43,9 +43,10 @@ Reach out to your account team for these:
 
 ## 8. Select Next
 
-## 9. [IMPORTANT] Before uploading scripts...
+## 9. Before uploading scripts...
 
-Ensure you've adapted BOTH of them for your environment per step 1 of this guide.
+> [!IMPORTANT]
+> Ensure you've adapted BOTH of them for your environment per step 1 of this guide.
 
 ## 10. Select detection-script.ps1 from file upload menu
 

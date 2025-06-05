@@ -21,38 +21,34 @@ SYSTEM context.*
 
 ## Creating the [Configuration Manager package](https://learn.microsoft.com/mem/configmgr/apps/deploy-use/packages-and-programs) for Silent Runner
 
-1. Launch the Configuration Manager console and navigate to **Software Library** pane, then to **Application Management**. You will then select **Packages**.
+1. Launch the Configuration Manager console and navigate to __Software Library__ pane, then to __Application Management__. You will then select __Packages__.
 
-2. Select the **Create Package** option.
+2. Select the __Create Package__ option.
 
 3. In the *Create Package and Program* wizard, configure the Package for your environment.
 
-    a.  On the **Package** page, configure the **Name** and **Source folder**. The *Source folder* should contain the [*silent-tester-runner-windows.ps1*](https://github.com/PeerDiego/silent-test-script/blob/main/silent-tester-runner-windows.ps1) script. The other fields are optional.\
+    a.  On the __Package__ page, configure the __Name__ and __Source folder__. The *Source folder* should contain the [*silent-tester-runner-windows.ps1*](https://github.com/PeerDiego/silent-test-script/blob/main/silent-tester-runner-windows.ps1) script. The other fields are optional.\
         :::image type="content" source="./media/sccm_image.png" alt-text="A screenshot of a software package Description automatically         generated":::
 
-    b.  On the **Program Type** page, select the **Standard** program type for computers.
+    b.  On the __Program Type__ page, select the __Standard__ program type for computers.
 
-    c.  On the **Standard Program** page, specify the following information.
+    c.  On the __Standard Program__ page, specify the following information.
 
-        i.  Provide a **Name**
+    - Provide a __Name__
+    - __Command Line__:\
+        cmd /c powershell.exe -NoProfile -ExecutionPolicy Bypass -File
+        silent-tester-runner-windows.ps1 -TestID \<a unique test
+        id\> -SCCM
+    - __Run__: Normal
+    - __Program Can Run__: Only when a user is logged on.
+    - __Run Mode__: Run with user's rights.
 
-        ii. **Command Line**:\
-            cmd /c powershell.exe -ExecutionPolicy Bypass -File
-            silent-tester-runner-windows.ps1 -TestID \<a unique test
-            id\> -SCCM
-
-        iii. **Run**: Normal
-
-        iv. **Program Can Run**: Only when a user is logged on.
-
-        v.  **Run Mode**: Run with user's rights.
-
-    d.  On the **Requirements page**, proceed with defaults or configure per your environment.
+    d.  On the __Requirements page__, proceed with defaults or configure per your environment.
 
     > [!NOTE]
-    > Configuration Manager cannot track packages running for more than 12 hours so it may present a "run time exceeded" failure for the deployment, which is an expected behavior and does not impact the runner script execution on the client side. Due to the long-running nature of the script, if it's been modified to run for less than 12 hours, we recommend setting the **Maximum allowed run time (minutes)** to "Unknown".*
+    > Configuration Manager cannot track packages running for more than 12 hours so it may present a "run time exceeded" failure for the deployment, which is an expected behavior and does not impact the runner script execution on the client side. Due to the long-running nature of the script, if it's been modified to run for less than 12 hours, we recommend setting the __Maximum allowed run time (minutes)__ to "Unknown".*
 
-    e.  On the **Summary** page, review and click *Next* to finish. Then click *Close* on the **Completion** page.
+    e.  On the __Summary__ page, review and click *Next* to finish. Then click *Close* on the __Completion__ page.
 
 4. Select the newly created Package and Distribute Content, proceed through the wizard as per customer environment.
 
