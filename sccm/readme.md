@@ -27,29 +27,29 @@ SYSTEM context.*
 
 3. In the *Create Package and Program* wizard, configure the Package for your environment.
 
-    a.  On the __Package__ page, configure the __Name__ and __Source folder__. The *Source folder* should contain the [*silent-tester-runner-windows.ps1*](https://github.com/PeerDiego/silent-test-script/blob/main/silent-tester-runner-windows.ps1) script. The other fields are optional.
+   a.  On the __Package__ page, configure the __Name__ and __Source folder__. The *Source folder* should contain the [*silent-tester-runner-windows.ps1*](https://github.com/PeerDiego/silent-test-script/blob/main/silent-tester-runner-windows.ps1) script. The other fields are optional.
 
    ![A screenshot of a software package creation.](./media/sccm_image.png)
 
-    b.  On the __Program Type__ page, select the __Standard__ program type for computers.
+   b.  On the __Program Type__ page, select the __Standard__ program type for computers.
 
-    c.  On the __Standard Program__ page, specify the following information.
+   c.  On the __Standard Program__ page, specify the following information.
 
-    - Provide a __Name__
-    - __Command Line__:\
-        cmd /c powershell.exe -NoProfile -ExecutionPolicy Bypass -File
-        silent-tester-runner-windows.ps1 -TestID \<a unique test
-        id\> -SCCM
-    - __Run__: Normal
-    - __Program Can Run__: Only when a user is logged on.
-    - __Run Mode__: Run with user's rights.
+   - Provide a __Name__
+   - __Command Line__:\
+       cmd /c powershell.exe -NoProfile -ExecutionPolicy Bypass -File
+       silent-tester-runner-windows.ps1 -TestID \<a unique test
+       id\> -SCCM
+   - __Run__: Normal
+   - __Program Can Run__: Only when a user is logged on.
+   - __Run Mode__: Run with user's rights.
 
-    d.  On the __Requirements page__, proceed with defaults or configure per your environment.
+   d.  On the __Requirements page__, proceed with defaults or configure per your environment.
 
-  > [!NOTE]
-  > Configuration Manager cannot track packages running for more than 12 hours so it may present a "run time exceeded" failure for the deployment, which is an expected behavior and does not impact the runner script execution on the client side. Due to the long-running nature of the script, if it's been modified to run for less than 12 hours, we recommend setting the __Maximum allowed run time (minutes)__ to "Unknown".*
+   > [!NOTE]
+   > Configuration Manager cannot track packages running for more than 12 hours so it may present a "run time exceeded" failure for the deployment, which is an expected behavior and does not impact the runner script execution on the client side. Due to the long-running nature of the script, if it's been modified to run for less than 12 hours, we recommend setting the __Maximum allowed run time (minutes)__ to "Unknown".*
 
-    e.  On the __Summary__ page, review and click *Next* to finish. Then click *Close* on the __Completion__ page.
+   e.  On the __Summary__ page, review and click *Next* to finish. Then click *Close* on the __Completion__ page.
 
 4. Select the newly created Package and Distribute Content, proceed through the wizard as per customer environment.
 
