@@ -1,4 +1,4 @@
-# [How to Deploy the eCDN Silent Runner Script with Microsoft Intune](https://app.tango.us/app/workflow/48a538b3-59c6-45a7-8b3a-90cdafdd9d50?utm_source=markdown&utm_medium=markdown&utm_campaign=workflow%20export%20links)
+# How to Deploy the eCDN Silent Runner Script with Microsoft Intune
 
 __Last Update Date:__ May 08, 2025  
 __Created By:__ Diego Reategui  
