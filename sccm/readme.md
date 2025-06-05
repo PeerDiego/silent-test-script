@@ -8,6 +8,9 @@ __Created By:__ Diego Reategui
 Goal: To provide guidance on how to facilitate Microsoft eCDN's Silent
 Testing feature using SCCM.
 
+> [!CAUTION]
+> This guidance has been tested and proven to work but __we cannot guarantee__ it will work in your environment. Please use the following as general guidance.
+
 *For more on silent testing,* see [*Microsoft eCDN Silent Testing framework on Microsoft Learn*](https://learn.microsoft.com/ecdn/technical-documentation/silent-testing-framework#appendix-b-integrating-runners-using-headless-browser).
 
 > [!NOTE]

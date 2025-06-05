@@ -8,6 +8,9 @@ __Created By:__ Diego Reategui
 
 Below is our guidance on how to deploy Microsoft eCDN Silent Runners using Microsoft Intune. Alternatively, you can download the [guidance in PDF format](./How%20to%20Deploy%20the%20eCDN%20Silent%20Runner%20Script%20with%20Microsoft%20Intune.pdf) and use your work or school credentials to access the content.
 
+> [!CAUTION]
+> This guidance has been tested and proven to work but __we cannot guarantee__ it will work in your environment. Please use the following as general guidance.
+
 ## 1. Procure the required scripts
 
 Reach out to your account team for these:
