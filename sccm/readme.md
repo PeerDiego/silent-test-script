@@ -1,5 +1,10 @@
 # Silent Testing with SCCM
 
+__Last Update Date:__ June, 2024  
+__Created By:__ Diego Reategui  
+
+***
+
 Goal: To provide guidance on how to facilitate Microsoft eCDN's Silent
 Testing feature using SCCM.
 
