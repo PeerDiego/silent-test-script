@@ -27,8 +27,9 @@ SYSTEM context.*
 
 3. In the *Create Package and Program* wizard, configure the Package for your environment.
 
-    a.  On the __Package__ page, configure the __Name__ and __Source folder__. The *Source folder* should contain the [*silent-tester-runner-windows.ps1*](https://github.com/PeerDiego/silent-test-script/blob/main/silent-tester-runner-windows.ps1) script. The other fields are optional.\
-        :::image type="content" source="./media/sccm_image.png" alt-text="A screenshot of a software package Description automatically         generated":::
+    a.  On the __Package__ page, configure the __Name__ and __Source folder__. The *Source folder* should contain the [*silent-tester-runner-windows.ps1*](https://github.com/PeerDiego/silent-test-script/blob/main/silent-tester-runner-windows.ps1) script. The other fields are optional.
+
+    :::image type="content" source="./media/sccm_image.png" alt-text="A screenshot of a software package Description automatically         generated":::
 
     b.  On the __Program Type__ page, select the __Standard__ program type for computers.
 
