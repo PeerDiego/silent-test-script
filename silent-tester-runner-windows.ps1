@@ -53,7 +53,7 @@ $defaultPaths = @(
   "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
   "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
   "C:\Program Files\Google\Chrome\Application\chrome.exe")
-$durationMinimum = 60
+$durationMinimum = 10
 $HeadlessRunner = -not $DirectRunner -and -not $OldHideMethod
 
 ### Parameter validation ###
@@ -64,6 +64,10 @@ if ($TenantID -notmatch $RegexForTenantId) {
 }
 if ($ScenarioDuration -lt $durationMinimum) {
   Write-Error "Invalid Parameter: Scenario Duration. Please provide a Scenario Duration of greater than $durationMinimum seconds."
+  Exit 1
+}
+if ($TestID -notmatch '^[a-zA-Z0-9_\-]+$') {
+  Write-Error "Invalid Parameter: Test ID. Please provide a valid Test ID containing only alphanumeric characters, underscores, or hyphens."
   Exit 1
 }
 if ((Test-Path $logPath) -and (!$AllowMultipleRuns)) {
@@ -98,7 +102,9 @@ $definition = @"
     }
   }
 "@
-Add-Type -MemberDefinition $definition -Namespace my -Name WinApi
+if (-not $HeadlessRunner -and -not ("my.WinApi" -as [type])) {
+  Add-Type -MemberDefinition $definition -Namespace my -Name WinApi
+}
 
 ###################
 ### MAIN SCRIPT ###
@@ -301,6 +307,7 @@ if ($PassThru) {
 }
 
 if ($UEM_Compatible_Mode) {
+  Write-OutputOrHost "Scheduled to end at $((Get-Date).AddSeconds($ScenarioDuration)) (in $ScenarioDuration seconds)"
   Start-Sleep -Seconds 5
   return
 }
@@ -324,4 +331,4 @@ if (Test-Path $cacheFolderPath) {
     Remove-Item -Recurse $cacheFolderPath
   } catch {}
 }
-Write-Host "$(Get-Date)  Stopped Chromium process"
+Write-OutputOrHost "$(Get-Date)  Stopped Chromium process"
