@@ -41,7 +41,7 @@ Testing feature using SCCM.
    - Provide a __Name__
    - __Command Line__:\
        `cmd /c powershell.exe -NoProfile -ExecutionPolicy Bypass -File silent-tester-runner-windows.ps1 -SCCM -TestID <a unique test id>`\
-       Optionally, specifically just for troubleshooting, you may use `-AdapterId` parameter with an argument such as `%COMPUTERNAME%` which will reflect in the Silent Testing management console.
+       > TIP: Optionally, specifically just for troubleshooting, you may use `-AdapterId` parameter with a customized argument such as `%COMPUTERNAME%` which will reflect in the Silent Testing management console.
    - __Run__: Hidden
    - __Program Can Run__: Only when a user is logged on.
    - __Run Mode__: Run with administrative rights.\
