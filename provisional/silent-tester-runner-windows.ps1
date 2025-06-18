@@ -23,7 +23,7 @@ param (
 #############
 
 ### Setting up the variables and function ###
-$ScriptVersion = "2.2.16.2"
+$ScriptVersion = "2.2.16.12"
 $durationMinimum = 10
 $HeadlessRunner = -not $DirectRunner -and -not $OldHideMethod
 $logPath = "$env:TEMP\p5_log_" + $TestID + ".txt"
@@ -49,7 +49,13 @@ function Write-OutputOrHost {
     if ($UEM_Compatible_Mode) {
         Write-Output $Object
     } else {
-        Write-Host $Object -ForegroundColor $ForegroundColor
+        # Check the first word to determine the appropriate Write- command
+        $firstWord = ($Object -split '\s+')[0].TrimEnd(':')
+        switch ($firstWord.ToUpper()) {
+            'ERROR'   { Write-Error ($Object = "$(Get-Date)  $Object") }
+            'WARNING' { Write-Warning ($Object = "$(Get-Date)  $Object") }
+            default   { Write-Host $Object -ForegroundColor $ForegroundColor }
+        }
     }
     try {
       Add-Content -Path $scriptLogPath -Value $Object -Encoding UTF8 -ErrorAction Stop
@@ -59,26 +65,28 @@ function Write-OutputOrHost {
 }
 
 ### Parameter validation ###
-$RegexForTenantId = '[a-z0-9]{8}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{12}'
-if ($TenantID -notmatch $RegexForTenantId) {
-  Write-Error "Invalid Parameter: Tenant ID. Please provide a valid Tenant ID."
-  Exit 1
-}
-if ($ScenarioDuration -lt $durationMinimum) {
-  Write-Error "Invalid Parameter: Scenario Duration. Please provide a Scenario Duration of greater than $durationMinimum seconds."
-  Exit 1
-}
 if ($TestID -notmatch '^[a-zA-Z0-9_\-]+$') {
   Write-Error "Invalid Parameter: Test ID. Please provide a valid Test ID containing only alphanumeric characters, underscores, or hyphens."
   Exit 1
 }
-if ((Test-Path $logPath) -and (!$AllowMultipleRuns)) {
-  Write-Error "Test '$TestID' already ran on this machine. aborting"
+$RegexForTenantId = '[a-z0-9]{8}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{4}\-[a-z0-9]{12}'
+if ($TenantID -notmatch $RegexForTenantId) {
+  Write-OutputOrHost "ERROR: Invalid Parameter: Tenant ID '$TenantID'. Please provide a valid Tenant ID."
+  Exit 1
+}
+if ($ScenarioDuration -lt $durationMinimum) {
+  Write-OutputOrHost "ERROR: Invalid Parameter: Scenario Duration '$ScenarioDuration'. Please provide a Scenario Duration of greater than $durationMinimum seconds."
   Exit 1
 }
 if ($CustomChromiumPath -and !(Test-Path $CustomChromiumPath)) {
-  Write-Error "Invalid Parameter: Custom Chromium Path. Please provide a valid path to the Chromium executable."
+  Write-OutputOrHost "ERROR: Invalid Parameter: Custom Chromium Path '$CustomChromiumPath'. Please provide a valid path to the Chromium executable."
   Exit 1
+}
+
+### Checking if the script is already running on this machine with the same TestID ###
+if ((Test-Path $logPath) -and (!$AllowMultipleRuns)) {
+  Write-OutputOrHost "ERROR: Test '$TestID' already ran on this machine. aborting"
+  Exit 0
 }
 
 ### Old method: C# class to hide/show the browser window ###
@@ -104,7 +112,7 @@ if (-not $HeadlessRunner -and -not ("my.WinApi" -as [type])) {
 ###################
 ### MAIN SCRIPT ###
 ###################
-Write-OutputOrHost "Ver: $ScriptVersion"
+Write-OutputOrHost "Script version: $ScriptVersion"
 Write-OutputOrHost "Test ID: $TestID"
 Write-OutputOrHost "Adapter ID: $AdapterId"
 
@@ -192,7 +200,7 @@ if ($HeadlessRunner) {
 }
 
 $Process = Start-Process $CustomChromiumPath -RedirectStandardOutput $logPath -RedirectStandardError $errLogPath -PassThru -ArgumentList ($browserArguments -join ' ') -WorkingDirectory $env:TEMP
-Write-OutputOrHost "$(($startedAt=Get-Date))  Started $($Process.Name) Chromium process, with id: $($Process.id)"
+Write-OutputOrHost "$(($startedAt=Get-Date))  Started Chromium $($Process.Name) process, with id: $($Process.id)"
 # Swapping old window hide method with the --headless flag, as it doesn't work with the headless flag and will just indefinitely loop while it waits for the window to get a WindowHandle assigned.  Which it won't since it's headless.
 if ($OldHideMethod -and -not $DirectRunner -and [System.Security.Principal.WindowsIdentity]::GetCurrent().Name -ne "NT AUTHORITY\SYSTEM") {
   While ($Process.MainWindowHandle -eq 0 -and ($elapsed=(Get-Date) - $startedAt).TotalSeconds -lt 3) { Start-Sleep -m 100 }
@@ -211,9 +219,9 @@ $argos = @(
   # - checks if the Chromium process is still running
   "&& (tasklist /FI `"PID eq $chromePid`" | findstr $chromePid >nul)",
   # - if it is, it kills the process and logs the action, or logs that it failed to do so
-  "&& (taskkill.exe /f /t /pid $chromePid && echo Watchdog ended process at !date! !time! >> `"$scriptLogPath`"  || echo Watchdog failed to end process at !date! !time! >> `"$scriptLogPath`")",
+  "&& (taskkill.exe /f /t /pid $chromePid && echo !date:~4! !time:~0,8!  Watchdog ended chromium process >> `"$scriptLogPath`"  || echo !date:~4! !time:~0,8!  Watchdog failed to end chromium process >> `"$scriptLogPath`")",
   # - if the process is not running, it logs that the process was not found
-  "|| (echo PID $chromePid not found by Watchdog at !date! !time! >> `"$scriptLogPath`")",
+  "|| (echo !date:~4! !time:~0,8!  PID $chromePid not found by Watchdog >> `"$scriptLogPath`")",
   # - finally, removes the cache folder
   "& rd /s /q `"$cacheFolderPath`"")
 $watchdogProcess = Start-Process $cmd -WindowStyle hidden -ArgumentList $argos -Passthru
@@ -310,13 +318,13 @@ if ($PassThru) {
   Write-Verbose "Added new runner with ID $($Process.Id) to the global eCDNRunners list"
 
   if (-not $UEM_Compatible_Mode) {
-    Write-Warning "The -PassThru switch enables UEM_Compatible_Mode, relying solely on the watchdog process (ID $($watchdogProcess.Id)) to terminate the runner process."
+    Write-OutputOrHost "WARNING: The -PassThru switch enables UEM_Compatible_Mode, relying solely on the watchdog process (ID $($watchdogProcess.Id)) to terminate the runner process."
   }
   return $Process
 }
 
 if ($UEM_Compatible_Mode) {
-  Write-OutputOrHost "Scheduled to end at $((Get-Date).AddSeconds($ScenarioDuration)) (in $ScenarioDuration seconds)"
+  Write-OutputOrHost ((' '*21) + "Scheduled to end at $((Get-Date).AddSeconds($ScenarioDuration)) (in $ScenarioDuration seconds)")
   Start-Sleep -Seconds 5
   return
 }
@@ -327,7 +335,19 @@ if ($UEM_Compatible_Mode) {
 
 ### Waiting for the scenario duration time to elapse, then clean-up ###
 Start-Sleep -s $ScenarioDuration
-$stopProcessInfo = Stop-Process -InputObject $Process -PassThru
+# Check if the process is still running
+if ($Process.HasExited) {
+  Write-OutputOrHost "$(Get-Date)  Chromium process with ID $($Process.Id) has already exited."
+} else {
+  Write-OutputOrHost "$(Get-Date)  Ending Chromium process with ID $($Process.Id)"
+  try {
+    $stopProcessInfo = Stop-Process -InputObject $Process -Force -PassThru -ErrorAction Stop
+    Write-OutputOrHost "$(Get-Date)  Stopped Chromium process"
+    Stop-Process -InputObject $watchdogProcess -Force -ErrorAction SilentlyContinue
+  } catch {
+    Write-OutputOrHost "Failed to stop the Chromium process with ID $($Process.Id). Error: $_"
+  }
+}
 if (Test-Path $preferencesFilePath) {
   try {
     $Prefs = ((Get-Content $preferencesFilePath) -replace "`"exit_type`":`"Crashed`"" , "`"exit_type`":`"none`"") -replace "`"exited_cleanly`":false","`"exited_cleanly`":true"
@@ -340,4 +360,4 @@ if (Test-Path $cacheFolderPath) {
     Remove-Item -Recurse $cacheFolderPath
   } catch {}
 }
-Write-OutputOrHost "$(Get-Date)  Stopped Chromium process"
+Write-OutputOrHost "$(Get-Date)  Cleaned up cache folder at $cacheFolderPath"
