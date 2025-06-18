@@ -40,7 +40,7 @@ c.  On the __Standard Program__ page, specify the following information.
 
 - Provide a __Name__
 - __Command Line__:\
-    `cmd /c powershell.exe -ExecutionPolicy Bypass -File silent-tester-runner-windows.ps1 -SCCM -TestID <unique test id>`
+    `cmd /c powershell.exe -ExecutionPolicy Bypass -File silent-tester-runner-windows.ps1 -SCCM`
     > TIP: Optionally, specifically just for troubleshooting, you may use `-AdapterId` parameter with a customized argument such as `%COMPUTERNAME%` which will reflect in the Silent Testing management console.
 - __Run__: Hidden
 - __Program Can Run__: Only when a user is logged on.
