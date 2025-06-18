@@ -1,9 +1,6 @@
 # How to Deploy the eCDN Silent Runner Script with Microsoft SCCM
 
-> [!WARNING]
-> This guidance is currently undergoing revision and validation.  Please come back later or use at your own risk.
-
-__Last Update Date:__ June 2024  
+__Last Update Date:__ June 18th 2024  
 __Created By:__ Diego Reategui  
 
 ***
@@ -24,40 +21,48 @@ Testing feature using SCCM.
 
 ## Creating the [Configuration Manager package](https://learn.microsoft.com/mem/configmgr/apps/deploy-use/packages-and-programs) for Silent Runner
 
-1. Launch the Configuration Manager console and navigate to __Software Library__ pane, then to __Application Management__. You will then select __Packages__.
+### 1. Launch the Configuration Manager console and navigate to __Software Library__ pane, then to __Application Management__. You will then select __Packages__.
 
-2. Select the __Create Package__ option.
+### 2. Select the __Create Package__ option.
 
-3. In the *Create Package and Program* wizard, configure the Package for your environment.
+### 3. In the *Create Package and Program* wizard, configure the Package for your environment.
 
-   a.  On the __Package__ page, configure the __Name__ and __Source folder__. The *Source folder* should contain the [*silent-tester-runner-windows.ps1*](https://github.com/PeerDiego/silent-test-script/blob/main/silent-tester-runner-windows.ps1) script. The other fields are optional.
+a.  On the __Package__ page, configure the __Name__ and __Source folder__. The *Source folder* should contain the [*silent-tester-runner-windows.ps1*](./silent-tester-runner-windows.ps1) script. The other fields are optional.
 
-   ![A screenshot of a software package creation.](./media/sccm_image.png)
+![A screenshot of a software package creation.](./media/package_wizard.png)
 
-   b.  On the __Program Type__ page, select the __Standard__ program type for computers.
+b.  On the __Program Type__ page, select the __Standard__ program type for computers.
 
-   c.  On the __Standard Program__ page, specify the following information.
+c.  On the __Standard Program__ page, specify the following information.
 
-   - Provide a __Name__
-   - __Command Line__:\
-       `cmd /c powershell.exe -ExecutionPolicy Bypass -File silent-tester-runner-windows.ps1 -SCCM -TestID <a unique test id>`
-   - __Run__: Normal
-   - __Program Can Run__: Only when a user is logged on.
-   - __Run Mode__: Run with user's rights.
+- Provide a __Name__
+- __Command Line__:\
+    `cmd /c powershell.exe -ExecutionPolicy Bypass -File silent-tester-runner-windows.ps1 -SCCM`
+    > TIP: Optionally, specifically just for troubleshooting, you may use `-AdapterId` parameter with a customized argument such as `%COMPUTERNAME%` which will reflect in the Silent Testing management console.
+- __Run__: Hidden
+- __Program Can Run__: Only when a user is logged on.
+- __Run Mode__: Run with administrative rights.\
+       Also select the __Allow users to interact with this program__ checkbox.
 
-   d.  On the __Requirements page__, proceed with defaults or configure per your environment.
+d.  On the __Requirements page__, proceed with defaults or configure per your environment.
 
-   > NOTE: Configuration Manager cannot track packages running for more than 12 hours so it may present a "run time exceeded" failure for the deployment, which is an expected behavior and does not impact the runner script execution on the client side. Due to the long-running nature of the script, if it's been modified to run for less than 12 hours, we recommend setting the __Maximum allowed run time (minutes)__ to "Unknown".*
+> NOTE: Configuration Manager cannot track packages running for more than 12 hours so it may present a "run time exceeded" failure for the deployment, which is an expected behavior and does not impact the runner script execution on the client side. Due to the long-running nature of the script, if it's been modified to run for less than 12 hours, we recommend setting the __Maximum allowed run time (minutes)__ to "Unknown".*
 
-   e.  On the __Summary__ page, review and click *Next* to finish. Then click *Close* on the __Completion__ page.
+e.  On the __Summary__ page, review and click *Next* to finish. Then click *Close* on the __Completion__ page.
 
-4. Select the newly created Package and Distribute Content, proceed through the wizard as per customer environment.
+When completed, you should have something that looks like this.
 
-5. If necessary, [create a collection](https://learn.microsoft.com/mem/configmgr/core/clients/manage/collections/create-collections) of machines to deploy the silent runner script to.
+![A screenshot of a created package's General tab.](./media/completed_package_general.png)
 
-6. Deploy the Package to the target collection.
+![A screenshot of a created package's Environment tab.](./media/completed_package_environment.png)
 
-7. After targeted systems receive and process the Package deployment, the silent runners should be ready for headless testing via the [Microsoft eCDN Silent Testing dashboard](https://aka.ms/ecdn/admin/silent-tester).
+### 4. Select the newly created Package and Distribute Content, proceed through the wizard as per customer environment.
+
+### 5. If necessary, [create a collection](https://learn.microsoft.com/mem/configmgr/core/clients/manage/collections/create-collections) of machines to deploy the silent runner script to.
+
+### 6. Deploy the Package to the target collection.
+
+### 7. After targeted systems receive and process the Package deployment, the silent runners should be ready for headless testing via the [Microsoft eCDN Silent Testing dashboard](https://aka.ms/ecdn/admin/silent-tester).
 
 > [!NOTE]
 > If you wish to re-run the runner script, update test id within the script in the source folder, then update package distribution points. You can now deploy this package to a collection of machines.
