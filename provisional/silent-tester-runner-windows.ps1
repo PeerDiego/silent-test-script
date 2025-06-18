@@ -38,6 +38,8 @@ $defaultPaths = @(
   "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
   "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
   "C:\Program Files\Google\Chrome\Application\chrome.exe")
+
+# Function to write output to the console or host, and log it to a file
 function Write-OutputOrHost {
     param (
         [Parameter(Mandatory=$true)]

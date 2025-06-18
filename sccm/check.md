@@ -30,7 +30,7 @@ Testing feature using SCCM.
 
 ### 3. In the *Create Package and Program* wizard, configure the Package for your environment.
 
-a.  On the __Package__ page, configure the __Name__ and __Source folder__. The *Source folder* should contain the [*silent-tester-runner-windows.ps1*](https://github.com/PeerDiego/silent-test-script/blob/main/silent-tester-runner-windows.ps1) script. The other fields are optional.
+a.  On the __Package__ page, configure the __Name__ and __Source folder__. The *Source folder* should contain the [*silent-tester-runner-windows.ps1*](./silent-tester-runner-windows.ps1) script. The other fields are optional.
 
 ![A screenshot of a software package creation.](./media/package_wizard.png)
 
