@@ -1,6 +1,6 @@
 # How to Deploy the eCDN Silent Runner Script with Microsoft SCCM
 
-__Last Update Date:__ June 18th 2024  
+__Last Update Date:__ June 2025  
 __Created By:__ Diego Reategui  
 
 ***
@@ -65,7 +65,7 @@ When completed, you should have something that looks like this.
 
 ### 4. Select the newly created Package and Distribute Content, proceed through the wizard as per customer environment
 
-### 5. If necessary, [create a collection](https://learn.microsoft.com/mem/configmgr/core/clients/manage/collections/create-collections) of machines to deploy the silent runner script to
+### 5. If necessary, [create a collection](https://learn.microsoft.com/mem/configmgr/core/clients/manage/collections/create-collections) of machines for deploying the silent runner script
 
 ### 6. Deploy the Package to the target collection
 
