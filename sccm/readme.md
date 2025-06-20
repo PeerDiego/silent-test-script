@@ -5,20 +5,19 @@ __Created By:__ Diego Reategui
 
 ***
 
-Goal: To provide guidance on how to facilitate Microsoft eCDN's Silent
-Testing feature using SCCM.
+Goal: To provide guidance on how to facilitate Microsoft eCDN's Silent Testing feature using SCCM.
+
+*For more on silent testing,* see [*Microsoft eCDN Silent Testing framework on Microsoft Learn*](https://learn.microsoft.com/ecdn/technical-documentation/silent-testing-framework#appendix-b-integrating-runners-using-headless-browser).
 
 > [!CAUTION]
 > This guidance has been tested and proven to work but __we cannot guarantee__ it will work in your environment. Please use the following as general guidance.
-
-*For more on silent testing,* see [*Microsoft eCDN Silent Testing framework on Microsoft Learn*](https://learn.microsoft.com/ecdn/technical-documentation/silent-testing-framework#appendix-b-integrating-runners-using-headless-browser).
 
 > [!NOTE]
 > Customers should use the Package/Program delivery model instead of Applications due to the silent runner script not providing detection methods.
 
 ## Preparation: Configure Your Runner Script
 
-Obtain a copy of the runner script and configure it for your tenant.  We provide a version of the [*silent-tester-runner-windows.ps1*](./silent-tester-runner-windows.ps1) script which has been validated to work with the following SCCM guidance.
+Obtain a copy of the runner script and configure it for your tenant.  A version of the [*silent-tester-runner-windows.ps1*](./silent-tester-runner-windows.ps1) script which has been validated to work with the following SCCM guidance is provided for you here.
 
 > [!IMPORTANT]
 > When executing, the tenant id must be provided.  It's best practice to hard-code your tenant id as the default value of the `$TenantID` parameter.
