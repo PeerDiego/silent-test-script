@@ -12,7 +12,7 @@ Goal: To provide guidance on how to facilitate Microsoft eCDN's Silent Testing f
 > [!CAUTION]
 > This guidance has been tested and proven to work but __we cannot guarantee__ it will work in your environment. Please use the following as general guidance.
 
-## Preparation: Configure Your Runner Script
+## Preparation: Configure your runner script
 
 Obtain a copy of the runner script and configure it for your tenant.  A version of the [*silent-tester-runner-windows.ps1*](./silent-tester-runner-windows.ps1) script which has been validated to work with the following SCCM guidance is provided for you here.
 
