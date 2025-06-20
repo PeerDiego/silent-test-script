@@ -16,7 +16,7 @@ To provide guidance on how to facilitate Microsoft eCDN's Silent Testing feature
 
 ## Preparation: Configure your runner script
 
-Obtain a copy of the runner script and configure it for your tenant.  A version of the [*silent-tester-runner-windows.ps1*](./silent-tester-runner-windows.ps1) script which has been validated to work with the following SCCM guidance is provided for you here.
+Obtain a copy of the runner script and configure it for your tenant. This version of [*silent-tester-runner-windows.ps1* script](./silent-tester-runner-windows.ps1) has been validated to work with the SCCM guidance provided below.
 
 > [!IMPORTANT]
 > When executing, the tenant id must be provided.  It's best practice to hard-code your tenant id as the default value of the `$TenantID` parameter.
@@ -32,7 +32,7 @@ Obtain a copy of the runner script and configure it for your tenant.  A version 
 
 ### 3. In the *Create Package and Program* wizard, configure the Package for your environment
 
-a.  On the __Package__ page, configure the __Name__ and __Source folder__. The *Source folder* should contain the [*silent-tester-runner-windows.ps1*](./silent-tester-runner-windows.ps1) script. The other fields are optional.
+a.  On the __Package__ page, configure the __Name__ and __Source folder__. The *Source folder* should contain the *silent-tester-runner-windows.ps1* script. The other fields are optional.
 
 ![A screenshot of a software package creation.](./media/package_wizard_-_1_start.png)
 
