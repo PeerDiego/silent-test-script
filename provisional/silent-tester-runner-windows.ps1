@@ -23,7 +23,7 @@ param (
 #############
 
 ### Setting up the variables and function ###
-$ScriptVersion = "2.2.16.12"
+$ScriptVersion = "2.2.16.13"
 $durationMinimum = 10
 $HeadlessRunner = -not $DirectRunner -and -not $OldHideMethod
 $logPath = "$env:TEMP\p5_log_" + $TestID + ".txt"
@@ -356,8 +356,6 @@ if (Test-Path $preferencesFilePath) {
   } catch {}
 }
 if (Test-Path $cacheFolderPath) {
-  try {
-    Remove-Item -Recurse $cacheFolderPath
-  } catch {}
+  Remove-Item -Path $cacheFolderPath -Recurse -Force -ErrorAction SilentlyContinue
+  Write-OutputOrHost "$(Get-Date)  Cleaned up cache folder at $cacheFolderPath"
 }
-Write-OutputOrHost "$(Get-Date)  Cleaned up cache folder at $cacheFolderPath"
