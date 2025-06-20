@@ -16,9 +16,6 @@ Testing feature using SCCM.
 > [!NOTE]
 > Customers should use the Package/Program delivery model instead of Applications due to the silent runner script not providing detection methods.
 
-> [!IMPORTANT]
-> Unlike most Package/Program deployments, the silent test script should be run under the __USER context__, not the SYSTEM context.
-
 ## Creating the [Configuration Manager package](https://learn.microsoft.com/mem/configmgr/apps/deploy-use/packages-and-programs) for Silent Runner
 
 ### 1. Launch the Configuration Manager console and navigate to __Software Library__ pane, then to __Application Management__. You will then select __Packages__
