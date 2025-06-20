@@ -12,9 +12,6 @@ Goal: To provide guidance on how to facilitate Microsoft eCDN's Silent Testing f
 > [!CAUTION]
 > This guidance has been tested and proven to work but __we cannot guarantee__ it will work in your environment. Please use the following as general guidance.
 
-> [!NOTE]
-> Customers should use the Package/Program delivery model instead of Applications due to the silent runner script not providing detection methods.
-
 ## Preparation: Configure Your Runner Script
 
 Obtain a copy of the runner script and configure it for your tenant.  A version of the [*silent-tester-runner-windows.ps1*](./silent-tester-runner-windows.ps1) script which has been validated to work with the following SCCM guidance is provided for you here.
@@ -23,6 +20,9 @@ Obtain a copy of the runner script and configure it for your tenant.  A version 
 > When executing, the tenant id must be provided.  It's best practice to hard-code your tenant id as the default value of the `$TenantID` parameter.
 
 ## Creating the [Configuration Manager package](https://learn.microsoft.com/mem/configmgr/apps/deploy-use/packages-and-programs) for Silent Runner
+
+> [!NOTE]
+> Customers should use the Package/Program delivery model instead of Applications due to the silent runner script not providing detection methods.
 
 ### 1. Launch the Configuration Manager console and navigate to __Software Library__ pane, then to __Application Management__. You will then select __Packages__
 
