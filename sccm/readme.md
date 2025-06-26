@@ -46,7 +46,7 @@ c.  On the __Standard Program__ page, specify the following information.
     > TIP: Optionally, specifically just for troubleshooting, you may use `-AdapterId` parameter with a customized argument such as `%COMPUTERNAME%` which will reflect in the Silent Testing management console.
 - __Run__: Hidden
 - __Program can run__: Only when a user is logged on.
-- __Run mode__: Run with administrative rights.\
+- __Run mode__: Can run with either user or administrative rights.\
        Also select the __Allow users to view and interact with the program installation__ checkbox.
 
 ![A screenshot of a software package creation.](./media/package_wizard_-_2_standard_program.png)
