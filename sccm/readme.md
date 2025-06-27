@@ -11,6 +11,9 @@ __Created By:__ Diego Reategui
 
 To provide guidance on how to facilitate Microsoft eCDN's Silent Testing feature using SCCM.
 
+> [!IMPORTANT]
+> This guidance should be followed by your environment's SCCM administrator or someone with appropriate SCCM knowledge and permissions. This documentation assumes familiarity with Microsoft System Center Configuration Manager (SCCM).
+
 > [!CAUTION]
 > This guidance has been tested and proven to work but __we cannot guarantee__ it will work in your environment. Please use the following as general guidance.
 
