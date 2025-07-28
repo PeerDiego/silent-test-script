@@ -16,6 +16,7 @@ param (
   [string] $AdapterId, # Ensure the string is URL encoded, as it will be used in the URL. Default is PowerShell, or Direct if -DirectRunner switch is used. For troubleshooting, can use this dynamic, default value ="$(hostname)-$(Get-Date -Format "HHmm")"
   [Alias ("ReturnRunner")]
   [switch] $PassThru, # Returns the process object of the Chromium process.
+  [switch] $GCC, # Use if you want to use the GCC environment (adds .gcc to the URL).
   [switch] $OldHideMethod # Use if you want to use the old method of hiding the Chromium window using a C# class. This is not compatible with the --headless flag.
 )
 #############
@@ -33,7 +34,8 @@ $scriptLogPath = "$env:TEMP\p5_script_" + $TestID + ".txt"
 $preferencesFilePath = $p5UserDataDir + "\Default\Preferences"
 $cacheFolderPath = $p5UserDataDir + "\Default\Cache"
 if (!$AdapterId) { $AdapterId = if ($DirectRunner) { 'Direct' } else { 'PowerShell' } }
-$pageURL = "https://st-sdk.ecdn.teams.microsoft.com/?customerId=${TenantID}&adapterId=$AdapterId"
+$baseURL = if ($GCC) { "https://st-sdk.ecdn.gcc.teams.microsoft.com" } else { "https://st-sdk.ecdn.teams.microsoft.com" }
+$pageURL = "$baseURL/?customerId=${TenantID}&adapterId=$AdapterId"
 $defaultPaths = @(
   "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
   "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
