@@ -1,6 +1,6 @@
 # Microsoft eCDN (UEM Compatible) Silent Tester Runner script
 
-Improves the original script's flexibility, robustness, and compatibility with different environments.
+Modernized script for improved flexibility, robustness, and compatibility with different environments.
 
 - **Parameterization:** Allows more flexibility and reusability by passing arguments instead of hardcoding values.
 - **UEM Compatibility:** Introduced `UEM_Compatible_Mode` switch for better compatibility with UEM solutions like SCCM and Intune.

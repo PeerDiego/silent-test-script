@@ -113,3 +113,6 @@ You can leave the "Repeats every" textbox with the value of "1"
 You're done. Within the next 24 hours the scripts should run and your _silent runner_ should come online.
 
 There are methods of triggering the script to run earlier (such as restarting the endpoints) which involve accessing the target machine(s) directly, but those methods are out of scope for this guide.
+
+> [!TIP]
+> If you have a need to instance silent runners on a cyclical, recurring basis, see the latest versions of the remediation and detection scripts in [../provisional](../provisional/readme.md).
