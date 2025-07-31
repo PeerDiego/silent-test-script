@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param (
   [string] $TenantID = "TENANT_ID", # IMPORTANT! Either replace 'TENANT_ID' with your actual Microsoft Tenant Id or pass it as an argument.
-  [string] $TestID = "runner_$(Get-Date -Format "yyyyMMdd_HHmmss")", # TestID must be different for each test, unless you use the AllowMultipleRuns switch.
+  [string] $TestID = "runner_$(Get-Date -Format "yyyyMMdd_HHmmss")", # Must be unique per instance unless using AllowMultipleRuns. Dynamic timestamp avoids need to manually update static TestID values for repeated runs.
   [Alias ("Seconds")]
   [int] $ScenarioDuration = 86400, # Default is 86400 seconds, or 24 hours.
   [Alias ("SCCM","Intune")]
@@ -26,7 +26,7 @@ param (
 #############
 
 ### Setting up the variables and function ###
-$ScriptVersion = "2.2.16.13"
+$ScriptVersion = "2.2.17.0"
 $durationMinimum = 10
 $HeadlessRunner = -not $DirectRunner -and -not $OldHideMethod
 $logPath = "$env:TEMP\p5_log_" + $TestID + ".txt"

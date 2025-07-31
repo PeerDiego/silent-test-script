@@ -3,7 +3,7 @@ param (
     [string] $TenantID = "TENANT_ID", # IMPORTANT! Either replace 'TENANT_ID' with your actual Microsoft Tenant Id or pass it as an argument.
     [string] $TestID = "runner_$(Get-Date -Format "yyyyMMdd_HHmmss")", # TestID must be different for each test, unless you use the AllowMultipleRuns switch.
     [Alias ("Seconds")]
-    [int] $ScenarioDuration = 7200, # Default is 86400 seconds, or 24 hours.
+    [int] $ScenarioDuration = 86400, # Default is 86400 seconds, or 24 hours.
     [Alias ("SCCM","Intune")]
     [switch] $UEM_Compatible_Mode, # Use for better compatibility with UEM solutions such as SCCM and Intune.
     [Alias ("Force")]
