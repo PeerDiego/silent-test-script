@@ -15,4 +15,4 @@ Date: July 31st, 2025
 ## Change log - Detection script
 
 - Modified to support a repeating schedule / frequency
-- Modified to report back to Intune the remediation script's output. See _Pre-_ and _Post-remediation detection output_ columns
+- Modified to report back to Intune the remediation script's output. Seen in the _Pre-_ and _Post-remediation detection output_ columns of the __Device status__ page.
