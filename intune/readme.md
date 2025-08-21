@@ -115,4 +115,4 @@ You're done. Within the next 24 hours the scripts should run and your _silent ru
 There are methods of triggering the script to run earlier (such as restarting the endpoints) which involve accessing the target machine(s) directly, but those methods are out of scope for this guide.
 
 > [!TIP]
-> If you have a need to instance silent runners on a cyclical, recurring basis, see the latest, provisional versions of the _remediation_ and _detection_ scripts in the [../provisional](../provisional/readme.md) folder.
+> If you have a need to instance silent runners on a cyclical, recurring basis, see the latest, provisional versions of the and _detection_ script in the [../provisional](../provisional/readme.md) folder.
