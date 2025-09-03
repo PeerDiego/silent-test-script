@@ -5,7 +5,7 @@ param (
   [Alias ("Seconds")]
   [int] $ScenarioDuration = 86400, # Default is 86400 seconds, or 24 hours.
   [Alias ("SCCM","Intune")]
-  [switch] $UEM_Compatible_Mode, # Use for better compatibility with UEM solutions such as SCCM and Intune. Hard-code to =$ture for use with Intune.
+  [switch] $UEM_Compatible_Mode, # Use for better compatibility with UEM solutions such as SCCM and Intune. Hard-code to =$true for use with Intune.
   [Alias ("Force")]
   [switch] $AllowMultipleRuns, # Use if you want to be able to run more the once with the same $TestID on the machine. 2 tabs might jump to user.
   [Alias ("Chrome")]
