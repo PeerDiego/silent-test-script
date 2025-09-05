@@ -14,4 +14,5 @@ Date: September 5th, 2025
 
 - Improved watchdog process to detect and log if instanced runner is ended early.
 - Updated watchdog process now uses `powershell` instead of `cmd`.
+- Added a check for a silent runner potential blocker by the 'BrowserSignin' Edge policy.
 - Incremented version number.

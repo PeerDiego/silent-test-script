@@ -26,7 +26,7 @@ param (
 #############
 
 ### Setting up the variables and function ###
-$ScriptVersion = "2.3.0.0"
+$ScriptVersion = "2.3.1.0"
 $durationMinimum = 10
 $HeadlessRunner = -not $DirectRunner -and -not $OldHideMethod
 $logPath = "$env:TEMP\p5_log_" + $TestID + ".txt"
@@ -95,6 +95,12 @@ if ($CustomChromiumPath -and !(Test-Path $CustomChromiumPath)) {
 if ((Test-Path $logPath) -and (!$AllowMultipleRuns)) {
   Write-OutputOrHost "ERROR: Test '$TestID' already ran on this machine. aborting"
   Exit 0
+}
+
+# Check for Edge BrowserSignin policy that may block the runner
+$edgePolicy = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Edge' -Name BrowserSignin -ErrorAction SilentlyContinue
+if ($null -ne $edgePolicy -and $edgePolicy.BrowserSignin -eq 2) {
+  Write-OutputOrHost "WARNING: Edge policy 'BrowserSignin' is set to 2 (ForceSignIn). The runner is likely to be blocked by this policy. You can use the -DirectRunner to verify this. If so, remove or change the 'BrowserSignin' policy. Using Chrome via the -PreferChrome parameter may be a usable workaround." -ForegroundColor Yellow
 }
 
 ### Old method: C# class to hide/show the browser window ###
