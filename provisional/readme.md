@@ -1,6 +1,6 @@
 # Provisional Silent Test Runner script update
 
-Date: July 31st, 2025
+Date: September 5th, 2025
 
 > [!CAUTION]
 > While this provisional update has passed limited testing, __we do not guarantee__ it will work in your environment or for your purposes. Use the provisional script at your own risk.
@@ -12,4 +12,6 @@ Date: July 31st, 2025
 
 ## Change log - Runner script
 
-Not applicable at this time. Latest provisional version was promoted to recommended status.
+- Improved watchdog process to detect and log if instanced runner is ended early.
+- Updated watchdog process now uses `powershell` instead of `cmd`.
+- Incremented version number.
